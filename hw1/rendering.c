@@ -3,11 +3,13 @@
 */
 
 //Includes
+#include <stdio.h>
 #include <GL/glut.h> //linux 
+#include "rendering.h"
 
 //Global Variables
-double z_rotation_angle = 0
-double x_rotation_angle = 0
+double z_rotation_angle = 0;
+double x_rotation_angle = 0;
 
 /*
 * Function called by GLUT to display/render the scene
@@ -19,13 +21,13 @@ void display(){
 	//reset transformations
 	glLoadIdentity();
 	//Rotate the desired objects
-	glRotatef(z_rotation_angle,0.0,0.0,1.0)
+	glRotatef(z_rotation_angle,0.0,0.0,1.0);
 	//Rotate the desired objects
-	glRotatef(x_rotation_angle,1.0,0.0,0.0)
+	glRotatef(x_rotation_angle,1.0,0.0,0.0);
 	//Draw the desired objects 
-	drawPyramid()
+	drawPyramid();
 	//Error Check
-	ErrCheck("display")
+	ErrCheck("display");
 	//flush and swap buffer
 	glFlush();
 	glutSwapBuffers();
@@ -55,7 +57,7 @@ void drawPyramid(){
 	glColor3f(1.0,1.0,0); glVertex3f(0.5,0.5,0);
 	glColor3f(1.0,1.0,0); glVertex3f(0.0,-0.5,0.0);
 	glEnd();
-	ErrCheck("DrawPyramid")
+	ErrCheck("DrawPyramid");
 }
 
 /*

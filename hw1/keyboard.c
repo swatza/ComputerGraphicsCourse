@@ -3,6 +3,7 @@
 */
 
 #include <GL/glut.h> //linux 
+#include "keyboard.h"
 
 /*
 * Function called by glut when special keys are pressed: 
@@ -22,5 +23,5 @@ void special(int key, int x, int y){
 	if (key == GLUT_KEY_DOWN)
 		x_rotation_angle -= 2;
 	//Request display update
-	glutPostRedsiplay();
+	glutPostRedisplay();
 }

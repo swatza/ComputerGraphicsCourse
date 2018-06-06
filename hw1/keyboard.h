@@ -6,3 +6,5 @@ extern double z_rotation_angle;
 extern double x_rotation_angle;
 
 void special(int key, int x, int y); //prototype for dealing with GLUT special keys 
+
+#endif

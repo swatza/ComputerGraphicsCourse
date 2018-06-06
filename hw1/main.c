@@ -8,10 +8,34 @@
 #include <stdarg.h>
 #include <math.h>
 #include <GL/glut.h> //linux 
+#include "keyboard.h"
+#include "rendering.h"
 
 //Included Global Variables from other files 
 extern double z_rotation_angle;
 extern double x_rotation_angle;
+
+/*
+ * This function is called by GLUT when the window is resized
+ * Original by Professor
+ */
+void reshape(int width,int height)
+{
+   //  Calculate width to height ratio
+   double w2h = (height>0) ? (double)width/height : 1;
+   //  Set viewport as entire window
+   glViewport(0,0, width,height);
+   //  Select projection matrix
+   glMatrixMode(GL_PROJECTION);
+   //  Set projection to identity
+   glLoadIdentity();
+   //  Orthogonal projection:  unit cube adjusted for aspect ratio
+   glOrtho(-w2h,+w2h, -1.0,+1.0, -1.0,+1.0);
+   //  Select model view matrix
+   glMatrixMode(GL_MODELVIEW);
+   //  Set model view to identity
+   glLoadIdentity();
+}
 
 /*
 * GLUT Based Main Setup 
@@ -37,24 +61,4 @@ int main(int argc, char* argv[]){
 }
 
 
-/*
- * This function is called by GLUT when the window is resized
- * Original by Professor
- */
-void reshape(int width,int height)
-{
-   //  Calculate width to height ratio
-   double w2h = (height>0) ? (double)width/height : 1;
-   //  Set viewport as entire window
-   glViewport(0,0, width,height);
-   //  Select projection matrix
-   glMatrixMode(GL_PROJECTION);
-   //  Set projection to identity
-   glLoadIdentity();
-   //  Orthogonal projection:  unit cube adjusted for aspect ratio
-   glOrtho(-w2h,+w2h, -1.0,+1.0, -1.0,+1.0);
-   //  Select model view matrix
-   glMatrixMode(GL_MODELVIEW);
-   //  Set model view to identity
-   glLoadIdentity();
-}
+

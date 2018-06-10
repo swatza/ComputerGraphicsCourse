@@ -13,9 +13,7 @@
 #define GL_GLEXT_PROTOTYPES
 
 //Global Variables
-double z_rotation_angle = 0;
-double x_rotation_angle = 0;
-double number_of_points = 10000; 
+int number_of_points = 100; 
 //double *vertex; //= malloc(sizeof(double) * 3); //3 doubles indicate a vertex
 //double **points;// = malloc(sizeof(*double) * number_of_points * sizeof(vertex));
 
@@ -24,6 +22,7 @@ double number_of_points = 10000;
 * original by professor
 */
 void display(){
+	//double* output = malloc(size*sizeof(double));
 	//Clear the screen and Z buffer
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	//reset transformations
@@ -36,7 +35,8 @@ void display(){
 		//If there are changes; recalculate lorenz function 
 		//how do we store the points that we need to render each time? 
 	//Draw the desired objects 
-	
+	double* vals = getLorenzPoints(number_of_points);
+	draw3DLine(vals,number_of_points);
 	//Draw Axis
 	drawAxis();
 	//Print Angles;
@@ -50,12 +50,18 @@ void display(){
 	glutSwapBuffers();
 }
 
-void draw3DLine(double** values, int size){
-	int i;
+void draw3DLine(double* values, int size){
+	int i; int k;
+	double location[3];
+	//printf("The first value is %f\n",*values);
 	glBegin(GL_LINE_STRIP); //should draw N-1 lines based on N vertices
 	for (i = 0; i < size; i++){
-		double* location = values[i];
-		glVertex3d(location[0],location[1],location[2]); 
+		//printf("About to get the vertex location\n");
+		location[0] = (values[i*3]);
+		location[1] = (values[i*3+1]);
+		location[2] = (values[i*3+2]);
+		//printf("About to draw the vertex\n");
+		glColor3f(1.0,1.0,0); glVertex3d(location[0],location[1],location[2]);
 	}
 	glEnd(); 
 	ErrCheck("draw3DLine");
@@ -89,7 +95,7 @@ void printAngles(){
 	//Five pixels from lower left corner of window
 	glWindowPos2i(5,5);
 	//Print the text string
-	Print("Angle=%d,%d",x_rotation_angle,z_rotation_angle); 
+	Print("Angle=%f,%f",x_rotation_angle,z_rotation_angle); 
 }
 
 void printVariables(){
@@ -97,25 +103,25 @@ void printVariables(){
 	int width = glutGet(GLUT_WINDOW_WIDTH);
 	int height = glutGet(GLUT_WINDOW_HEIGHT);
 	//Print out the variables in upper left corner
-	glWindowPos2i(5,height-10);
-	//In a top -down fashion
-	Print("Parameter s: %d",lorenz_parameter_s);
 	glWindowPos2i(5,height-15);
-	Print("Parameter b: %d",lorenz_parameter_b);
-	glWindowPos2i(5,height-20);
-	Print("Parameter r: %d",lorenz_parameter_r);
-	glWindowPos2i(5,height-25);
-	Print("Scale Parameter: %i", scale);
-	//Mark which one is selected
+	//In a top -down fashion
+	Print("Parameter s: %f",lorenz_parameter_s);
+	glWindowPos2i(5,height-35);
+	Print("Parameter b: %f",lorenz_parameter_b);
+	glWindowPos2i(5,height-55);
+	Print("Parameter r: %f",lorenz_parameter_r);
+	glWindowPos2i(5,height-75);
+	Print("Scale Parameter: %d", scale);
+	//Mark which one is selected (Change color??)
 	
 	//For debugging print out the selector number too
-	glWindowPos2i(5,height-30);
-	Print("Selector: %i",variable_selector);
+	glWindowPos2i(5,height-95);
+	Print("Selector: %d",variable_selector);
 }
 
 void drawPyramid(){
 	//Draw 4 triangles that are Red, Green, Blue, Yellow
-	//Three side faces (Not an equalateral pyramid atm)
+	//Three side faces (Not an equalateral9pyramid atm)
 	glBegin(GL_POLYGON);
 	glColor3f(1.0,0.0,0); glVertex3f(-0.5,0.5,0);
 	glColor3f(1.0,0.0,0); glVertex3f(0.5,0.5,0);

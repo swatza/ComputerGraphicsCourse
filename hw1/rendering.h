@@ -2,13 +2,11 @@
 #define RENDERING_H
 
 //#define GL_GLEXT_PROTOTYPES
-extern double z_rotation_angle;
-extern double x_rotation_angle;
-extern double number_of_points;
+extern int number_of_points;
 
 //Functions
 void display(); //function prorotype for rendering
-void draw3DLine(double** values, int size);
+void draw3DLine(double* values, int size);
 void drawAxis();
 void printAngles();
 void printVariables();

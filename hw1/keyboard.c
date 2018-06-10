@@ -10,6 +10,11 @@
 //TODO! Need to add extra buttons to change the parameters of the lorenz function 
 int variable_selector = 0;
 int scale = 0; 
+double lorenz_parameter_s  = 10;
+double lorenz_parameter_b  = 2.6666;
+double lorenz_parameter_r  = 28;
+double z_rotation_angle = 0;
+double x_rotation_angle = 0;
 
 /*
 * Function called by glut when special keys are pressed: 
@@ -29,7 +34,7 @@ void special(int key, int x, int y){
 	if (key == GLUT_KEY_DOWN)
 		x_rotation_angle -= 2;
 	//Page Up
-	if (key == GLUT_KEY_PAGE_UP){
+	if (key == GLUT_KEY_HOME){
 		if (variable_selector == 0)
 			lorenz_parameter_s += 1;
 		if (variable_selector == 1)
@@ -40,7 +45,7 @@ void special(int key, int x, int y){
 			scale += 1;
 	}
 	//Page Down
-	if (key == GLUT_KEY_PAGE_DOWN){
+	if (key == GLUT_KEY_END){
 		if (variable_selector == 0)
 			lorenz_parameter_s -= 1;
 		if (variable_selector == 1)

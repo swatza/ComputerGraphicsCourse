@@ -7,11 +7,14 @@ extern double lorenz_parameter_r;
 extern int variable_selector;
 extern int scale; 
 
+//#define GL_GLEXT_PROTOTYPES
+
 //Functions
 void display(); //function prorotype for rendering
 void draw3DLine(double** values, int size);
 void drawAxis();
 void printAngles();
+void printVariables();
 void drawPyramid(); //function prototype for drawing a pyramid
 void Print(const char* format, ...);
 void ErrCheck(char* where); //function prototype for sanity checking GL errors

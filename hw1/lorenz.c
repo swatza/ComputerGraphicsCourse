@@ -15,8 +15,8 @@ double lorenz_parameter_r  = 28;
 double** getLorenzPoints(int numberOfIntegrations){
   //loop through all the coordinates
   int i;
-  double Coords[3];
-  double output[numberOfIntegrations][3]
+  double* Coords;
+  double output[numberOfIntegrations][3];
   Coords[0] = 1; // x
   Coords[1] = 1; // y 
   Coords[2] = 1; // z
@@ -27,11 +27,16 @@ double** getLorenzPoints(int numberOfIntegrations){
   for (i=0;i<numberOfIntegrations;i++){
     Coords = getNextLorenzPoint(Coords,dt);
     //How are we gonna store these
-    output[i] = Coords; //i have no idea if this right 
+    output[i][0] = Coords[0]; //i have no idea if this right 
+    output[i][1] = Coords[1];
+    output[i][2] = Coords[2];
   }
 }
 
-double* getNextLorenzPoint(double[] previousCoords, double timestep){
+double* getNextLorenzPoint(double* previousCoords, double timestep){
+  double x = previousCoords[0];
+  double y = previousCoords[1];
+  double z = previousCoords[2];
   //first calculate the derivative points
   double dx = lorenz_parameter_s*(y-x);
   double dy = x*(lorenz_parameter_r-z)-y;
@@ -64,9 +69,9 @@ int test()
     */
    for (i=0;i<50000;i++)
    {
-      double dx = s*(y-x);
-      double dy = x*(r-z)-y;
-      double dz = x*y - b*z;
+      double dx = lorenz_parameter_s*(y-x);
+      double dy = x*(lorenz_parameter_r-z)-y;
+      double dz = x*y - lorenz_parameter_b*z;
       x += dt*dx;
       y += dt*dy;
       z += dt*dz;

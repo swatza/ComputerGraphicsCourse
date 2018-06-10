@@ -34,7 +34,7 @@ void special(int key, int x, int y){
 			lorenz_parameter_b += 1;
 		if (variable_selector == 2)
 			lorenz_parameter_r += 1;
-		if (varaible_selector == 3)
+		if (variable_selector == 3)
 			scale += 1;
 	}
 	//Page Down
@@ -45,7 +45,7 @@ void special(int key, int x, int y){
 			lorenz_parameter_b -= 1;
 		if (variable_selector == 2)
 			lorenz_parameter_r -= 1;
-		if (varaible_selector == 3)
+		if (variable_selector == 3)
 			scale -= 1;
 	}
 	//INSERT

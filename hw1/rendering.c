@@ -4,15 +4,18 @@
 
 //Includes
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
 #include <GL/glut.h> //linux 
 #include "rendering.h"
+#define GL_GLEXT_PROTOTYPES
 
 //Global Variables
 double z_rotation_angle = 0;
 double x_rotation_angle = 0;
 double number_of_points = 10000; 
-double *vertex = malloc(sizeof(double) * 3); //3 doubles indicate a vertex
-double **points = malloc(sizeof(*double) * number_of_points * sizeof(vertex));
+double *vertex; //= malloc(sizeof(double) * 3); //3 doubles indicate a vertex
+double **points;// = malloc(sizeof(*double) * number_of_points * sizeof(vertex));
 
 /*
 * Function called by GLUT to display/render the scene
@@ -31,11 +34,13 @@ void display(){
 		//If there are changes; recalculate lorenz function 
 		//how do we store the points that we need to render each time? 
 	//Draw the desired objects 
-	drawPyramid();
+	
 	//Draw Axis
 	drawAxis();
 	//Print Angles;
 	printAngles();
+	//Print variables
+	printVariables();
 	//Error Check
 	ErrCheck("display");
 	//flush and swap buffer
@@ -82,7 +87,7 @@ void printAngles(){
 	//Five pixels from lower left corner of window
 	glWindowPos2i(5,5);
 	//Print the text string
-	Print("Angle=%d,%d",x_rotation_angle,z_rotation_angle);
+	Print("Angle=%d,%d",x_rotation_angle,z_rotation_angle); 
 }
 
 void printVariables(){
@@ -90,7 +95,7 @@ void printVariables(){
 	int width = glutGet(GLUT_WINDOW_WIDTH);
 	int height = glutGet(GLUT_WINDOW_HEIGHT);
 	//Print out the variables in upper left corner
-	glWindowPos2i(5,height);
+	glWindowPos2i(5,height-10);
 	//In a top -down fashion
 	Print("Parameter s: %d",lorenz_parameter_s);
 	Print("Parameter b: %d",lorenz_parameter_b);

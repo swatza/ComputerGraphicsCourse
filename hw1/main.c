@@ -18,6 +18,7 @@
  */
 void reshape(int width,int height)
 {
+	const double dim=2.5;
    //  Calculate width to height ratio
    double w2h = (height>0) ? (double)width/height : 1;
    //  Set viewport as entire window
@@ -27,7 +28,7 @@ void reshape(int width,int height)
    //  Set projection to identity
    glLoadIdentity();
    //  Orthogonal projection:  unit cube adjusted for aspect ratio
-   glOrtho(-w2h,+w2h, -1.0,+1.0, -1.0,+1.0);
+   glOrtho(-w2h*dim,+w2h*dim, -dim,+dim, -dim,+dim);
    //  Select model view matrix
    glMatrixMode(GL_MODELVIEW);
    //  Set model view to identity

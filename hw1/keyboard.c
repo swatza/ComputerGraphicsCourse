@@ -59,7 +59,8 @@ void special(int key, int x, int y){
 			variable_selector = 0; 
 	}
 	//TODO Put limits on the scale and parameters
-	
+	x_rotation_angle %= 360;
+	z_rotation_angle %= 360;
 	//Request display update
 	glutPostRedisplay();
 }

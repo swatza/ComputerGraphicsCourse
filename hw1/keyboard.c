@@ -34,7 +34,7 @@ void special(int key, int x, int y){
 	if (key == GLUT_KEY_DOWN)
 		x_rotation_angle -= 2;
 	//Page Up
-	if (key == GLUT_KEY_HOME){
+	if (key == GLUT_KEY_PAGE_UP){
 		if (variable_selector == 0)
 			lorenz_parameter_s += 1;
 		if (variable_selector == 1)
@@ -45,7 +45,7 @@ void special(int key, int x, int y){
 			scale += 1;
 	}
 	//Page Down
-	if (key == GLUT_KEY_END){
+	if (key == GLUT_KEY_PAGE_DOWN){
 		if (variable_selector == 0)
 			lorenz_parameter_s -= 1;
 		if (variable_selector == 1)

@@ -4,6 +4,8 @@
 
 #include <GL/glut.h> //linux 
 #include "keyboard.h"
+#include "lorenz.h"
+#include "rendering.h"
 
 //TODO! Need to add extra buttons to change the parameters of the lorenz function 
 int variable_selector = 0;

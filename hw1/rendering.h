@@ -1,13 +1,10 @@
 #ifndef RENDERING_H
 #define RENDERING_H
 
-extern double lorenz_parameter_s;
-extern double lorenz_parameter_b;
-extern double lorenz_parameter_r;
-extern int variable_selector;
-extern int scale; 
-
 //#define GL_GLEXT_PROTOTYPES
+extern double z_rotation_angle;
+extern double x_rotation_angle;
+extern double number_of_points;
 
 //Functions
 void display(); //function prorotype for rendering

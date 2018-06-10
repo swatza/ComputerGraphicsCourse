@@ -6,6 +6,8 @@
 
 #include <stdio.h>
 #include "lorenz.h"
+#include "keyboard.h"
+#include "rendering.h"
 
 /*  Lorenz Parameters  */
 double lorenz_parameter_s  = 10;

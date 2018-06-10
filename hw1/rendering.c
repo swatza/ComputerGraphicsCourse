@@ -8,14 +8,16 @@
 #include <stdarg.h>
 #include <GL/glut.h> //linux 
 #include "rendering.h"
+#include "keyboard.h"
+#include "lorenz.h"
 #define GL_GLEXT_PROTOTYPES
 
 //Global Variables
 double z_rotation_angle = 0;
 double x_rotation_angle = 0;
 double number_of_points = 10000; 
-double *vertex; //= malloc(sizeof(double) * 3); //3 doubles indicate a vertex
-double **points;// = malloc(sizeof(*double) * number_of_points * sizeof(vertex));
+//double *vertex; //= malloc(sizeof(double) * 3); //3 doubles indicate a vertex
+//double **points;// = malloc(sizeof(*double) * number_of_points * sizeof(vertex));
 
 /*
 * Function called by GLUT to display/render the scene
@@ -98,12 +100,16 @@ void printVariables(){
 	glWindowPos2i(5,height-10);
 	//In a top -down fashion
 	Print("Parameter s: %d",lorenz_parameter_s);
+	glWindowPos2i(5,height-15);
 	Print("Parameter b: %d",lorenz_parameter_b);
+	glWindowPos2i(5,height-20);
 	Print("Parameter r: %d",lorenz_parameter_r);
+	glWindowPos2i(5,height-25);
 	Print("Scale Parameter: %i", scale);
 	//Mark which one is selected
 	
 	//For debugging print out the selector number too
+	glWindowPos2i(5,height-30);
 	Print("Selector: %i",variable_selector);
 }
 

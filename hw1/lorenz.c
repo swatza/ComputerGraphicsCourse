@@ -12,7 +12,7 @@ double lorenz_parameter_s  = 10;
 double lorenz_parameter_b  = 2.6666;
 double lorenz_parameter_r  = 28;
 
-void getLorenzPoints(int numberOfIntegrations){
+double** getLorenzPoints(int numberOfIntegrations){
   //loop through all the coordinates
   int i;
   double Coords[3];
@@ -47,7 +47,7 @@ double* getNextLorenzPoint(double[] previousCoords, double timestep){
 /*
  *  Main
  */
-int main(int argc, char *argv[])
+int test()
 {
    int i;
    /*  Coordinates  */

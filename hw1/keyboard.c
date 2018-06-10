@@ -5,6 +5,10 @@
 #include <GL/glut.h> //linux 
 #include "keyboard.h"
 
+//TODO! Need to add extra buttons to change the parameters of the lorenz function 
+int variable_selector = 0;
+int scale = 0; 
+
 /*
 * Function called by glut when special keys are pressed: 
 * Original by Professor 
@@ -22,6 +26,38 @@ void special(int key, int x, int y){
 	//Down Arrow
 	if (key == GLUT_KEY_DOWN)
 		x_rotation_angle -= 2;
+	//Page Up
+	if (key == GLUT_KEY_PAGE_UP){
+		if (variable_selector == 0)
+			lorenz_parameter_s += 1;
+		if (variable_selector == 1)
+			lorenz_parameter_b += 1;
+		if (variable_selector == 2)
+			lorenz_parameter_r += 1;
+		if (varaible_selector == 3)
+			scale += 1;
+	}
+	//Page Down
+	if (key == GLUT_KEY_PAGE_DOWN){
+		if (variable_selector == 0)
+			lorenz_parameter_s -= 1;
+		if (variable_selector == 1)
+			lorenz_parameter_b -= 1;
+		if (variable_selector == 2)
+			lorenz_parameter_r -= 1;
+		if (varaible_selector == 3)
+			scale -= 1;
+	}
+	//INSERT
+	if (key == GLUT_KEY_INSERT){
+		//Rotate through the different possible variables 
+		variable_selector += 1;
+		//If its bigger than the variable number; go back to 0
+		if (variable_selector > 3)
+			variable_selector = 0; 
+	}
+	//TODO Put limits on the scale and parameters
+	
 	//Request display update
 	glutPostRedisplay();
 }

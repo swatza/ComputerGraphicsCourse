@@ -15,6 +15,14 @@
 extern double z_rotation_angle;
 extern double x_rotation_angle;
 
+extern double lorenz_parameter_s;
+extern double lorenz_parameter_b;
+extern double lorenz_parameter_r;
+
+extern int variable_selector;
+extern int scale; 
+
+
 /*
  * This function is called by GLUT when the window is resized
  * Original by Professor

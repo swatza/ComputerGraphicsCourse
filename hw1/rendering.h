@@ -6,7 +6,7 @@ extern int number_of_points;
 
 //Functions
 void display(); //function prorotype for rendering
-void draw3DLine(double** values, int size);
+void draw3DLine(double* values, int size);
 void drawAxis();
 void printAngles();
 void printVariables();

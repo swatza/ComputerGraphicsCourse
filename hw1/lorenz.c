@@ -13,12 +13,13 @@
 
 /*  Lorenz Parameters  */
 
-double** getLorenzPoints(int numberOfIntegrations){
+double* getLorenzPoints(int numberOfIntegrations){
   //loop through all the coordinates
   int i;
   double Coords[3];
   //double output[numberOfIntegrations][3];
-  double output[numberOfIntegrations][3];
+  int size = numberOfIntegrations*3;
+  double* output = malloc(size*sizeof(double));
   //printf("Initialized Variables inside Lorenz Points\n");
   Coords[0] = 1; // x
   Coords[1] = 1; // y 
@@ -35,12 +36,12 @@ double** getLorenzPoints(int numberOfIntegrations){
     Coords[2] = ptr[2];
     //printf("Successfully handed the results to coords\n");
     //How are we gonna store these
-    output[i][0] = Coords[0]; //i have no idea if this right 
-    output[i][1] = Coords[1];
-    output[i][2] = Coords[2];
+    output[i*3] = Coords[0]; //i have no idea if this right 
+    output[i*3+1] = Coords[1];
+    output[i*3+2] = Coords[2];
     //printf("Successfully stored outputs\n");
   }
-  return &output;
+  return output;
 }
 
 double* getNextLorenzPoint(double* previousCoords, double timestep){

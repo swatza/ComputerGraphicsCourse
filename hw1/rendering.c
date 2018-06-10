@@ -22,6 +22,7 @@ int number_of_points = 100;
 * original by professor
 */
 void display(){
+	//double* output = malloc(size*sizeof(double));
 	//Clear the screen and Z buffer
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	//reset transformations
@@ -34,8 +35,8 @@ void display(){
 		//If there are changes; recalculate lorenz function 
 		//how do we store the points that we need to render each time? 
 	//Draw the desired objects 
-	double** values = getLorenzPoints(number_of_points);
-	draw3DLine(values,number_of_points);
+	double* vals = getLorenzPoints(number_of_points);
+	draw3DLine(vals,number_of_points);
 	//Draw Axis
 	drawAxis();
 	//Print Angles;
@@ -49,19 +50,18 @@ void display(){
 	glutSwapBuffers();
 }
 
-void draw3DLine(double** values, int size){
+void draw3DLine(double* values, int size){
 	int i; int k;
+	double location[3];
+	//printf("The first value is %f\n",*values);
 	glBegin(GL_LINE_STRIP); //should draw N-1 lines based on N vertices
 	for (i = 0; i < size; i++){
-		printf("About to get the vertex location\n");
-		double* vertex = *(values++); //this should give a pointer to the sub array
-		double location[3];
-		printf("About to sub loop location\n");
-		for (k =0; k < 3; k++){
-			location[k] = *(vertex++);
-		}
-		printf("About to draw the vertex\n");
-		glVertex3d(location[0],location[1],location[2]); 
+		//printf("About to get the vertex location\n");
+		location[0] = (values[i*3]);
+		location[1] = (values[i*3+1]);
+		location[2] = (values[i*3+2]);
+		//printf("About to draw the vertex\n");
+		glColor3f(1.0,1.0,0); glVertex3d(location[0],location[1],location[2]);
 	}
 	glEnd(); 
 	ErrCheck("draw3DLine");

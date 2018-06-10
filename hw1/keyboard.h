@@ -6,6 +6,12 @@
 //Global variables used in this file 
 extern int variable_selector;
 extern int scale;
+extern double lorenz_parameter_s;
+extern double lorenz_parameter_b;
+extern double lorenz_parameter_r;
+extern double z_rotation_angle;
+extern double x_rotation_angle;
+
 
 void special(int key, int x, int y); //prototype for dealing with GLUT special keys 
 

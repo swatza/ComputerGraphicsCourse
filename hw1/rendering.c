@@ -32,11 +32,8 @@ void display(){
 	//Rotate the desired objects
 	glRotatef(x_rotation_angle,1.0,0.0,0.0);
 	//Translate based on scale desired
-	//TODO!
-	// Check to see if any parameters changed and we need to recalculate all the points 
-		//If there are changes; recalculate lorenz function 
-		//how do we store the points that we need to render each time? 
 	//Draw the desired objects 
+	//**** TODO -> Optimization could be done here ****
 	double* vals = getLorenzPoints(number_of_points);
 	draw3DLine(vals,number_of_points);
 	//Draw Axis
@@ -123,7 +120,7 @@ void printVariables(){
 
 	getActiveColor(9);
 	glWindowPos2i(5,height-95);
-	Print("Zoom Scale: %f",zoom_scale);
+	Print("Insert to toggle parameter to change")
 }
 
 void getActiveColor(int v){

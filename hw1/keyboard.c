@@ -10,7 +10,6 @@
 //TODO! Need to add extra buttons to change the parameters of the lorenz function 
 int variable_selector = 0;
 double scale = 0.2;
-double zoom_scale = 2.5;
 double lorenz_parameter_s  = -2.0;
 double lorenz_parameter_b  = 8.6666;
 double lorenz_parameter_r  = 19.0;
@@ -57,13 +56,6 @@ void special(int key, int x, int y){
 			scale -= 0.1;
 	}
 
-	//Zoom buttons
-	if (key == GLUT_KEY_HOME){
-		zoom_scale += 0.5;
-	}
-	if (key == GLUT_KEY_END){
-		zoom_scale -= 0.5;
-	}
 	//INSERT
 	if (key == GLUT_KEY_INSERT){
 		//Rotate through the different possible variables 
@@ -77,12 +69,28 @@ void special(int key, int x, int y){
 		scale = -1.0;
 	if (scale > 1.0)
 		scale = 1.0;
-	if (zoom_scale < 1)
-		zoom_scale = 1;
-	if (zoom_scale > 10)
-		zoom_scale = 10;
 	//x_rotation_angle %= 360; //doesn't work for doubles... :(
 	//z_rotation_angle %= 360;
 	//Request display update
+	glutPostRedisplay();
+}
+
+/*
+* GLUT Calls this routine when a key is pressed (not special keys)
+* Original by Professor
+*/
+void key(unsigned char ch, int x, int y){
+	//Exit on ESC
+	if(ch == 27)
+		exit(0);
+	//reset parameters and view angle
+	else if (ch == 'r'){
+		_rotation_angle = z_rotation_angle = 0;
+		lorenz_parameter_s  = -2.0;
+		lorenz_parameter_b  = 8.6666;
+		lorenz_parameter_r  = 19.0;
+		scale = 0.2;
+	}
+	//Tell GLUT it is necessary to redisplay the scene
 	glutPostRedisplay();
 }

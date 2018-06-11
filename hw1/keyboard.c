@@ -6,6 +6,7 @@
 #include "keyboard.h"
 #include "lorenz.h"
 #include "rendering.h"
+#define GL_GLEXT_PROTOTYPES
 
 //TODO! Need to add extra buttons to change the parameters of the lorenz function 
 int variable_selector = 0;
@@ -85,7 +86,7 @@ void key(unsigned char ch, int x, int y){
 		exit(0);
 	//reset parameters and view angle
 	else if (ch == 'r'){
-		_rotation_angle = z_rotation_angle = 0;
+		x_rotation_angle = z_rotation_angle = 0;
 		lorenz_parameter_s  = -2.0;
 		lorenz_parameter_b  = 8.6666;
 		lorenz_parameter_r  = 19.0;

@@ -50,7 +50,7 @@ void display(){
 }
 
 void draw3DLine(double* values, int size){
-	int i; int k;
+	int i;
 	double location[3];
 	//printf("The first value is %f\n",*values);
 	glBegin(GL_LINE_STRIP); //should draw N-1 lines based on N vertices
@@ -102,7 +102,7 @@ void printAngles(){
 
 void printVariables(){
 	//get window size
-	int width = glutGet(GLUT_WINDOW_WIDTH);
+	//int width = glutGet(GLUT_WINDOW_WIDTH);
 	int height = glutGet(GLUT_WINDOW_HEIGHT);
 	//Print out the variables in upper left corner
 	getActiveColor(0);
@@ -123,7 +123,7 @@ void printVariables(){
 
 	getActiveColor(9);
 	glWindowPos2i(5,height-95);
-	Print("Insert to toggle parameter to change")
+	Print("Insert to toggle parameter to change");
 }
 
 void getActiveColor(int v){

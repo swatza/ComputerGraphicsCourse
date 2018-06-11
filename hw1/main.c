@@ -51,6 +51,7 @@ int main(int argc, char* argv[]){
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutSpecialFunc(special);
+	glutKeyboardFunc(key);
 	//Enable Z-buffer depth test
 	glEnable(GL_DEPTH_TEST);
 	// Pass control to GLUT for events

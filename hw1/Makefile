@@ -1,3 +1,8 @@
+#hw1make: main.c lorenz.c rendering.c keyboard.c
+#	gcc -O3 -Wall -o hw1 main.c lorenz.c rendering.c keyboard.c -lglut -lGLU -lGL -lm
+
+#clean:
+#	rm -f hw1 *.o *.a
 #HW1
 EXE=hw1
 SOURCES=main.c lorenz.c keyboard.c rendering.c
@@ -24,10 +29,9 @@ endif
 CLEAN=rm -f $(EXE) *.o *.a
 endif
 
-#Compile rules
-.c.o:
-	gcc -c $(CLFG) $< -o $@
-	
 #Link
 $(EXE): $(OBJECTS)
-	gcc -O3 $(LIBS) $(OBJECTS) -o $@
+	gcc $(CLFG) $(SOURCES) $(LIBS) -o $@
+
+clean:
+	$(CLEAN)

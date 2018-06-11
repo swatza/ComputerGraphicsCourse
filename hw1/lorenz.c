@@ -1,7 +1,7 @@
 /*
  * Simple program to demonstrate generating coordinates
  * using the Lorenz Attractor
- * Original by Professor
+ * Original by Willem A. (Vlakkies) Schreuder
  */
 
 #include <stdio.h>

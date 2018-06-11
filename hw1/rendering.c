@@ -19,7 +19,7 @@ int number_of_points = 10000;
 
 /*
 * Function called by GLUT to display/render the scene
-* original by professor
+* original by Willem A. (Vlakkies) Schreuder
 */
 void display(){
 	//double* output = malloc(size*sizeof(double));
@@ -89,7 +89,10 @@ void drawAxis(){
 	Print("Z");
 	ErrCheck("drawAxis");
 }
-
+/*
+* Used to print out the rotation angles in the bottom left 
+* Original by Willem A. (Vlakkies) Schreuder
+*/
 void printAngles(){
 	//Five pixels from lower left corner of window
 	glWindowPos2i(5,5);
@@ -162,7 +165,7 @@ void drawPyramid(){
 /*
  *  Convenience routine to output raster text
  *  Use VARARGS to make this more flexible
- *  Original by Professor 
+ *  Original by Willem A. (Vlakkies) Schreuder
  */
 #define LEN 8192  //  Maximum length of text string
 void Print(const char* format, ...){
@@ -180,7 +183,7 @@ void Print(const char* format, ...){
 
 /*
 * GL Basic Error Check Function
-* Original by Professor
+* Original by Willem A. (Vlakkies) Schreuder
 */
 void ErrCheck(char* where)
 {

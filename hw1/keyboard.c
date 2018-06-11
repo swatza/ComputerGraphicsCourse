@@ -18,7 +18,7 @@ double x_rotation_angle = 0;
 
 /*
 * Function called by glut when special keys are pressed: 
-* Original by Professor 
+* Original by Willem A. (Vlakkies) Schreuder
 */
 void special(int key, int x, int y){
 	//Right Arrow 
@@ -77,7 +77,7 @@ void special(int key, int x, int y){
 
 /*
 * GLUT Calls this routine when a key is pressed (not special keys)
-* Original by Professor
+* Original by Willem A. (Vlakkies) Schreuder
 */
 void key(unsigned char ch, int x, int y){
 	//Exit on ESC

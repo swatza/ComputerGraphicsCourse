@@ -14,7 +14,7 @@
 
 /*
  * This function is called by GLUT when the window is resized
- * Original by Professor
+ * Original by Willem A. (Vlakkies) Schreuder
  */
 void reshape(int width,int height)
 {
@@ -38,7 +38,7 @@ void reshape(int width,int height)
 
 /*
 * GLUT Based Main Setup 
-* Original by Professor
+* Original by Willem A. (Vlakkies) Schreuder
 */
 int main(int argc, char* argv[]){
 	//Initialize GLUT

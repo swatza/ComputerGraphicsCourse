@@ -9,10 +9,11 @@
 
 //TODO! Need to add extra buttons to change the parameters of the lorenz function 
 int variable_selector = 0;
-int scale = 0; 
-double lorenz_parameter_s  = 10;
-double lorenz_parameter_b  = 2.6666;
-double lorenz_parameter_r  = 28;
+double scale = 0.2;
+double zoom_scale = 2.5;
+double lorenz_parameter_s  = -2.0;
+double lorenz_parameter_b  = 8.6666;
+double lorenz_parameter_r  = 19.0;
 double z_rotation_angle = 0;
 double x_rotation_angle = 0;
 
@@ -42,7 +43,7 @@ void special(int key, int x, int y){
 		if (variable_selector == 2)
 			lorenz_parameter_r += 1;
 		if (variable_selector == 3)
-			scale += 1;
+			scale += 0.1;
 	}
 	//Page Down
 	if (key == GLUT_KEY_PAGE_DOWN){
@@ -53,7 +54,15 @@ void special(int key, int x, int y){
 		if (variable_selector == 2)
 			lorenz_parameter_r -= 1;
 		if (variable_selector == 3)
-			scale -= 1;
+			scale -= 0.1;
+	}
+
+	//Zoom buttons
+	if (key == GLUT_KEY_HOME){
+		zoom_scale += 0.5;
+	}
+	if (key == GLUT_KEY_END){
+		zoom_scale -= 0.5;
 	}
 	//INSERT
 	if (key == GLUT_KEY_INSERT){
@@ -64,8 +73,16 @@ void special(int key, int x, int y){
 			variable_selector = 0; 
 	}
 	//TODO Put limits on the scale and parameters
-	x_rotation_angle %= 360;
-	z_rotation_angle %= 360;
+	if (scale < -1.0)
+		scale = -1.0;
+	if (scale > 1.0)
+		scale = 1.0;
+	if (zoom_scale < 1)
+		zoom_scale = 1;
+	if (zoom_scale > 10)
+		zoom_scale = 10;
+	//x_rotation_angle %= 360; //doesn't work for doubles... :(
+	//z_rotation_angle %= 360;
 	//Request display update
 	glutPostRedisplay();
 }

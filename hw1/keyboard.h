@@ -5,7 +5,8 @@
 
 //Global variables used in this file 
 extern int variable_selector;
-extern int scale;
+extern double scale;
+extern double zoom_scale;
 extern double lorenz_parameter_s;
 extern double lorenz_parameter_b;
 extern double lorenz_parameter_r;

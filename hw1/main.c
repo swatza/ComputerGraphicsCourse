@@ -18,7 +18,8 @@
  */
 void reshape(int width,int height)
 {
-	const double dim=2.5;
+	const double dim=5.0;
+	//double dim = zoom_scale;
    //  Calculate width to height ratio
    double w2h = (height>0) ? (double)width/height : 1;
    //  Set viewport as entire window

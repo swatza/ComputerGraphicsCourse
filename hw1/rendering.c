@@ -13,7 +13,7 @@
 #define GL_GLEXT_PROTOTYPES
 
 //Global Variables
-int number_of_points = 100; 
+int number_of_points = 10000; 
 //double *vertex; //= malloc(sizeof(double) * 3); //3 doubles indicate a vertex
 //double **points;// = malloc(sizeof(*double) * number_of_points * sizeof(vertex));
 
@@ -31,6 +31,8 @@ void display(){
 	glRotatef(z_rotation_angle,0.0,0.0,1.0);
 	//Rotate the desired objects
 	glRotatef(x_rotation_angle,1.0,0.0,0.0);
+	//Translate based on scale desired
+	//TODO!
 	// Check to see if any parameters changed and we need to recalculate all the points 
 		//If there are changes; recalculate lorenz function 
 		//how do we store the points that we need to render each time? 
@@ -57,9 +59,9 @@ void draw3DLine(double* values, int size){
 	glBegin(GL_LINE_STRIP); //should draw N-1 lines based on N vertices
 	for (i = 0; i < size; i++){
 		//printf("About to get the vertex location\n");
-		location[0] = (values[i*3]);
-		location[1] = (values[i*3+1]);
-		location[2] = (values[i*3+2]);
+		location[0] = (values[i*3]) * scale;
+		location[1] = (values[i*3+1]) * scale;
+		location[2] = (values[i*3+2]) * scale;
 		//printf("About to draw the vertex\n");
 		glColor3f(1.0,1.0,0); glVertex3d(location[0],location[1],location[2]);
 	}
@@ -103,20 +105,34 @@ void printVariables(){
 	int width = glutGet(GLUT_WINDOW_WIDTH);
 	int height = glutGet(GLUT_WINDOW_HEIGHT);
 	//Print out the variables in upper left corner
+	getActiveColor(0);
 	glWindowPos2i(5,height-15);
-	//In a top -down fashion
 	Print("Parameter s: %f",lorenz_parameter_s);
+
+	getActiveColor(1);
 	glWindowPos2i(5,height-35);
 	Print("Parameter b: %f",lorenz_parameter_b);
+
+	getActiveColor(2);
 	glWindowPos2i(5,height-55);
 	Print("Parameter r: %f",lorenz_parameter_r);
+
+	getActiveColor(3);
 	glWindowPos2i(5,height-75);
-	Print("Scale Parameter: %d", scale);
-	//Mark which one is selected (Change color??)
-	
-	//For debugging print out the selector number too
+	Print("Scale Parameter: %f", scale);
+
+	getActiveColor(9);
 	glWindowPos2i(5,height-95);
-	Print("Selector: %d",variable_selector);
+	Print("Zoom Scale: %f",zoom_scale);
+}
+
+void getActiveColor(int v){
+	if (variable_selector == v){
+		glColor3f(1.0,0.0,0.0); //set active color as red
+	}
+	else{
+		glColor3f(1.0,1.0,1.0); //set normal color as white
+	}
 }
 
 void drawPyramid(){

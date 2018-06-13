@@ -4,7 +4,6 @@
 
 #include <GL/glut.h> //linux 
 #include "keyboard.h"
-#include "lorenz.h"
 #include "rendering.h"
 #define GL_GLEXT_PROTOTYPES
 

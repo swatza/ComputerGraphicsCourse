@@ -10,7 +10,6 @@
 #include <GL/glut.h> //linux 
 #include "keyboard.h"
 #include "rendering.h"
-#include "lorenz.h"
 
 /*
  * This function is called by GLUT when the window is resized
@@ -43,6 +42,7 @@ void reshape(int width,int height)
 int main(int argc, char* argv[]){
 	//Initialize GLUT
 	glutInit(&argc,argv);
+	glutInitWindowSize(600,600);
 	//Request double buffer true color window with z buffer (if possible)
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	//Create a window 
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
 	glutSpecialFunc(special);
 	glutKeyboardFunc(key);
 	//Enable Z-buffer depth test
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 	// Pass control to GLUT for events
 	glutMainLoop();
 	// Return to OS

@@ -5,7 +5,7 @@
 #	rm -f hw1 *.o *.a
 #HW1
 EXE=hw1
-SOURCES=main.c lorenz.c keyboard.c rendering.c
+SOURCES=main.c keyboard.c rendering.c util.c
 OBJECTS=$(SOURCES:.c=.o)
 
 all: $(SOURCES) $(EXE)

@@ -134,7 +134,7 @@ static void sphere1(double x,double y,double z,double r)
    glPushMatrix();
    //  Offset and scale
    glTranslated(x,y,z);
-   glScaled(r,r,r);
+   glScaled(r/5,r,r);
 
    //  South pole cap
    glBegin(GL_TRIANGLE_FAN);

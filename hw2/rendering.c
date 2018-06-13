@@ -38,6 +38,7 @@ void display(){
 	//**** TODO -> Optimization could be done here ****
 	//double* vals = getLorenzPoints(number_of_points);
 	//draw3DLine(vals,number_of_points);
+	//drawCylinder(0,0,0,1,3);
 	drawCowLeg();
 	//Print Angles;
 	printAngles();
@@ -111,44 +112,47 @@ void drawCylinder(double cx,double cy, double cz, double r, double h){
 	glColor3f(1.0,0.0,0.0);	
 	glVertex3f(0,0,h/2);
 	//Loop through
-	for(th=0;th<=360;th+=d;){
+	for(th=0;th<=360;th+=d){
 		//Draw the vertexs
 		//Get x and Y position
-		xyz = spherical2cartesianCoords(r,th,0);
+		xyz = polar2cartesianCoords(r,th);
 		glColor3f(1.0,0.0,0.0);
 		//Color
 		glVertex3f(xyz[0],xyz[1],h/2);
 	}
 	glEnd();
+	ErrCheck("Finished Top");
 	
 	//Draw Middle *BLUE*
 	glBegin(GL_QUAD_STRIP);
-	for (th=0;th<=360;th+=d;){
-		xyz = spherical2cartesianCoords(r,th,0);
+	for (th=0;th<=360;th+=d){
+		xyz = polar2cartesianCoords(r,th); //WHY IS THIS RIGHT??
 		glColor3f(0.0,1.0,0.0);
 		glVertex3f(xyz[0],xyz[1],h/2);
 		glVertex3f(xyz[0],xyz[1],-h/2);
 	}
 	glEnd();
+	ErrCheck("Finished Middle Portion");
 	
 	//Draw Bottom  *GREEN*
 	glBegin(GL_TRIANGLE_FAN);
 	//Draw center point;
 	glColor3f(0.0,0.0,1.0);	
-	glVertex3f(0,0,h/2);
+	glVertex3f(0,0,-h/2);
 	//Loop through
-	for(th=0;th<=360;th+=d;){
+	for(th=0;th<=360;th+=d){
 		//Draw the vertexs
 		//Get x and Y position
-		xyz = spherical2cartesianCoords(r,th,0);
+		xyz = polar2cartesianCoords(r,th);
 		glColor3f(0.0,0.0,1.0);
 		//Color
-		glVertex3f(xyz[0],xyz[1],h/2);
+		glVertex3f(xyz[0],xyz[1],-h/2);
 	}
 	glEnd();
 	
 	//undo transformation
 	glPopMatrix();
+	ErrCheck("End of Cylinder");
 }
 
 
@@ -162,11 +166,13 @@ void drawCow(){
 
 void drawCowLeg(){
 	//Draw upper leg
-	drawCylinder(0,0,0,1,2);
+	drawCylinder(0,0,0,.5,2);
 	//Draw joint sphere
-	drawEllipsoid(0,0,-1,1,1,1);
+	drawEllipsoid(0,0,-1,.5,.5,.5);
+	//bend the leg by like 30 degs
+	glRotatef(30.0,1.0,0.0,0.0);
 	//Draw lower leg
-	drawCylinder(0,0,-3,1,2);
+	drawCylinder(0,0,-2,.5,2);
 }
 
 /*

@@ -24,6 +24,19 @@ double* spherical2cartesianCoords(double r,double theta, double phi, double rx, 
 	return retval; 
 }
 
+double* polar2cartesianCoords(double r, double theta){
+	theta = deg2rad(theta);
+	double x = r * cos(theta);
+	double y = r * sin(theta);
+
+	static double retval[3];
+	retval[0] = x;
+	retval[1] = y;
+	retval[2] = 0;
+
+	return retval;
+}
+
 double deg2rad(double deg){
 	double rad = deg * 3.1415927/180;
 	return rad;

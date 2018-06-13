@@ -38,7 +38,7 @@ void display(){
 	//**** TODO -> Optimization could be done here ****
 	//double* vals = getLorenzPoints(number_of_points);
 	//draw3DLine(vals,number_of_points);
-	drawOval(0,0,0,2);
+	drawCowLeg();
 	//Print Angles;
 	printAngles();
 	//Error Check
@@ -71,7 +71,7 @@ void drawVertex(double th,double ph){
 * Draw a 3D oval extended version of a sphere
 * Based on Professors' sphere1 version 
 */
-void drawOval(double cx,double cy, double cz, double r){
+void drawEllipsoid(double cx,double cy, double cz, double a, double b, double r){
 	const int d=5; //spacing on angles
 	int th,ph;
 
@@ -79,7 +79,7 @@ void drawOval(double cx,double cy, double cz, double r){
 	glPushMatrix();
 	//offset and scale
 	glTranslated(cx,cy,cz);
-	glScaled(r,r,r);
+	glScaled(a,b,r); //how did we decide which axis to scale? 
 
 	for (ph=-90;ph<90;ph+=d)
    {
@@ -92,10 +92,81 @@ void drawOval(double cx,double cy, double cz, double r){
       glEnd();
    }
 	
-
 	//Undo transformations
 	glPopMatrix();
 
+}
+
+void drawCylinder(double cx,double cy, double cz, double r, double h){
+	const int d=2; //spacing on angles
+	int th; 
+	double* xyz;
+	//Draw a fan
+	glPushMatrix();
+	//offset; assume position definition is center of object
+	glTranslated(cx,cy,cz);
+	//Draw top *RED*
+	glBegin(GL_TRIANGLE_FAN);
+	//Draw center point;
+	glColor3f(1.0,0.0,0.0);	
+	glVertex3f(0,0,h/2);
+	//Loop through
+	for(th=0;th<=360;th+=d;){
+		//Draw the vertexs
+		//Get x and Y position
+		xyz = spherical2cartesianCoords(r,th,0);
+		glColor3f(1.0,0.0,0.0);
+		//Color
+		glVertex3f(xyz[0],xyz[1],h/2);
+	}
+	glEnd();
+	
+	//Draw Middle *BLUE*
+	glBegin(GL_QUAD_STRIP);
+	for (th=0;th<=360;th+=d;){
+		xyz = spherical2cartesianCoords(r,th,0);
+		glColor3f(0.0,1.0,0.0);
+		glVertex3f(xyz[0],xyz[1],h/2);
+		glVertex3f(xyz[0],xyz[1],-h/2);
+	}
+	glEnd();
+	
+	//Draw Bottom  *GREEN*
+	glBegin(GL_TRIANGLE_FAN);
+	//Draw center point;
+	glColor3f(0.0,0.0,1.0);	
+	glVertex3f(0,0,h/2);
+	//Loop through
+	for(th=0;th<=360;th+=d;){
+		//Draw the vertexs
+		//Get x and Y position
+		xyz = spherical2cartesianCoords(r,th,0);
+		glColor3f(0.0,0.0,1.0);
+		//Color
+		glVertex3f(xyz[0],xyz[1],h/2);
+	}
+	glEnd();
+	
+	//undo transformation
+	glPopMatrix();
+}
+
+
+void drawCow(){
+	//Draw an oval for the body
+	
+	//Draw another oval for the head
+	
+	//Draw some legs
+}
+
+void drawCowLeg(){
+	//Draw upper leg
+	drawCylinder(0,0,0,1,2);
+	//Draw joint sphere
+	drawEllipsoid(0,0,-1,1,1,1);
+	//Draw lower leg
+	drawCylinder(0,0,-3,1,2);
 }
 
 /*

@@ -7,7 +7,10 @@ extern int number_of_points;
 //Functions
 void display(); //function prorotype for rendering
 void Vertex(double th, double ph);
-void drawOval(double cx, double cy, double cz, double r);
+void drawEllipsoid(double cx,double cy, double cz, double a, double b, double r);
+void drawCylinder(double cx,double cy, double cz, double r, double h);
+void drawCow();
+void drawCowLeg();
 void printAngles();
 void drawPyramid(); //function prototype for drawing a pyramid
 void Print(const char* format, ...);

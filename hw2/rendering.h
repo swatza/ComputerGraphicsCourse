@@ -10,7 +10,8 @@ void Vertex(double th, double ph);
 void drawEllipsoid(double cx,double cy, double cz, double a, double b, double r);
 void drawCylinder(double cx,double cy, double cz, double r, double h);
 void drawCow();
-void drawCowLeg();
+void drawCowLegStraight();
+void drawCowLegBent();
 void printAngles();
 void drawPyramid(); //function prototype for drawing a pyramid
 void Print(const char* format, ...);

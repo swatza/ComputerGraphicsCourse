@@ -35,11 +35,7 @@ void display(){
 	glRotatef(x_rotation_angle,0.0,1.0,0.0);
 	//Translate based on scale desired
 	//Draw the desired objects 
-	//**** TODO -> Optimization could be done here ****
-	//double* vals = getLorenzPoints(number_of_points);
-	//draw3DLine(vals,number_of_points);
-	//drawCylinder(0,0,0,1,3);
-	drawCowLeg();
+	drawCow();
 	//Print Angles;
 	printAngles();
 	//Error Check
@@ -158,21 +154,59 @@ void drawCylinder(double cx,double cy, double cz, double r, double h){
 
 void drawCow(){
 	//Draw an oval for the body
-	
+	drawEllipsoid(0,0,0,5,2,2);
 	//Draw another oval for the head
-	
+	drawEllipsoid(4,0,0,1,2,2);
 	//Draw some legs
+	//Rear Leg
+	glPushMatrix();
+	glTranslated(-2.5,-1,-1);
+	drawCowLegStraight();
+	glPopMatrix();
+	//Rear Leg
+	glPushMatrix();
+	glTranslated(-2.5,1,-1);
+	drawCowLegStraight();
+	glPopMatrix();
+	//Front Leg
+	glPushMatrix();
+	glTranslated(2.5,-1,-1);
+	drawCowLegStraight();
+	glPopMatrix();
+	//Front Leg
+	glPushMatrix();
+	glTranslated(2.5,1,-1);
+	drawCowLegStraight();
+	glPopMatrix();
 }
 
-void drawCowLeg(){
+void drawHead(){
+	//Draw Ellipsoid
+
+	//draw Triangle ears 
+}
+
+void drawCowLegStraight(){
 	//Draw upper leg
 	drawCylinder(0,0,0,.5,2);
 	//Draw joint sphere
 	drawEllipsoid(0,0,-1,.5,.5,.5);
-	//bend the leg by like 30 degs
-	glRotatef(30.0,1.0,0.0,0.0);
 	//Draw lower leg
 	drawCylinder(0,0,-2,.5,2);
+}
+
+void drawCowLegBent(){
+	//Upper leg forward direction
+	glPushMatrix();
+	glRotatef(45,0,1,0);
+	drawCylinder(0,0,0,0.5,2);
+	glPopMatrix();
+	glPushMatrix();
+	drawEllipsoid(-0.707,0,-.707,0.5,0.5,0.5);
+	glPopMatrix();
+	glPushMatrix();
+	drawCylinder(-.707,0,-1.707,0.5,2);
+	glPopMatrix();
 }
 
 /*

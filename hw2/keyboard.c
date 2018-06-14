@@ -7,14 +7,19 @@
 #include "rendering.h"
 #define GL_GLEXT_PROTOTYPES
 
-//TODO! Need to add extra buttons to change the parameters of the lorenz function 
-int variable_selector = 0;
-double scale = 0.2;
-double lorenz_parameter_s  = -2.0;
-double lorenz_parameter_b  = 8.6666;
-double lorenz_parameter_r  = 19.0;
-double z_rotation_angle = 0;
-double x_rotation_angle = 0;
+int x_rotation_angle = 0;
+int z_rotation_angle = 0;
+int view_mode = 0; //0 = overhead/god mode, 1 = aircraft 1, 2 = aircraft 2, 3 = first person
+double camera_x = 0;
+double camera_y = 0; 
+double camera_z = 1; //default height of the camera
+double camera_roll = 0;
+double camera_pitch = 0;
+double camera_yaw = 0;
+
+static double movespeed = 1;
+static double turnspeed = 1;
+
 
 /*
 * Function called by glut when special keys are pressed: 
@@ -23,54 +28,17 @@ double x_rotation_angle = 0;
 void special(int key, int x, int y){
 	//Right Arrow 
 	if (key == GLUT_KEY_RIGHT)
-		z_rotation_angle += 2; 
+		x_rotation_angle += 2; 
 	//Left Arrow
 	else if (key == GLUT_KEY_LEFT)
-		z_rotation_angle -= 2;
-	//Up Arrow
-	if (key == GLUT_KEY_UP)
-		x_rotation_angle += 2;
-	//Down Arrow
-	if (key == GLUT_KEY_DOWN)
 		x_rotation_angle -= 2;
-	//Page Up
-	if (key == GLUT_KEY_PAGE_UP){
-		if (variable_selector == 0)
-			lorenz_parameter_s += 1;
-		if (variable_selector == 1)
-			lorenz_parameter_b += 1;
-		if (variable_selector == 2)
-			lorenz_parameter_r += 1;
-		if (variable_selector == 3)
-			scale += 0.1;
+	//Up Arrow
+	else if (key == GLUT_KEY_UP){
+		z_rotation_angle += 2;
 	}
-	//Page Down
-	if (key == GLUT_KEY_PAGE_DOWN){
-		if (variable_selector == 0)
-			lorenz_parameter_s -= 1;
-		if (variable_selector == 1)
-			lorenz_parameter_b -= 1;
-		if (variable_selector == 2)
-			lorenz_parameter_r -= 1;
-		if (variable_selector == 3)
-			scale -= 0.1;
+	else if (key == GLUT_KEY_DOWN){
+		z_rotation_angle -= 2;
 	}
-
-	//INSERT
-	if (key == GLUT_KEY_INSERT){
-		//Rotate through the different possible variables 
-		variable_selector += 1;
-		//If its bigger than the variable number; go back to 0
-		if (variable_selector > 3)
-			variable_selector = 0; 
-	}
-	//TODO Put limits on the scale and parameters
-	if (scale < -1.0)
-		scale = -1.0;
-	if (scale > 1.0)
-		scale = 1.0;
-	//x_rotation_angle %= 360; //doesn't work for doubles... :(
-	//z_rotation_angle %= 360;
 	//Request display update
 	glutPostRedisplay();
 }
@@ -83,14 +51,49 @@ void key(unsigned char ch, int x, int y){
 	//Exit on ESC
 	if(ch == 27)
 		exit(0);
-	//reset parameters and view angle
+	//reset view position and parameters
 	else if (ch == 'r'){
-		x_rotation_angle = z_rotation_angle = 0;
-		lorenz_parameter_s  = -2.0;
-		lorenz_parameter_b  = 8.6666;
-		lorenz_parameter_r  = 19.0;
-		scale = 0.2;
+
+	}
+	//Move Forward in 1st Person
+	else if(ch == 'w'){
+		//move the camera location 
+		camera_x += movespeed * cos(deg2rad(camera_yaw));
+	}
+	//Turn Left
+	else if(ch == 'a'){
+		camera_yaw += turnspeed;
+	}
+	//Turn Right
+	else if(ch == 'd'){
+		camera_yaw -= turnspeed;
+	}
+	//Move Backwards
+	else if(ch == 's'){
+		camera_y += movespeed * sin(deg2rad(camera_yaw));
+	}
+	//Switch View Mode
+	//Switch to first person mode
+	else if(ch == 0){
+		view_mode = 0;
+	}
+	else if(ch == 1){
+		//Switch to aircraft 1
+		view_mode = 1;
+	}
+	else if(ch == 2){
+		//switch to aircraft 2
+		view_mode = 2;
+	}
+	else if(ch == 'p'){
+		view_mode = 3;
 	}
 	//Tell GLUT it is necessary to redisplay the scene
 	glutPostRedisplay();
+}
+
+
+void mouse(int button, int state, int x, int y){
+	//relative mouse buttons and other things...
+
 }

@@ -32,7 +32,7 @@ void display(){
 	//Rotate the desired objects
 	glRotatef(z_rotation_angle,1.0,0.0,0.0);
 	//Rotate the desired objects
-	glRotatef(x_rotation_angle,0.0,1.0,0.0);
+	glRotatef(x_rotation_angle,0.0,0.0,1.0);
 	//Translate based on scale desired
 	//Draw the desired objects 
 	drawCow();
@@ -156,7 +156,9 @@ void drawCow(){
 	//Draw an oval for the body
 	drawEllipsoid(0,0,0,5,2,2);
 	//Draw another oval for the head
-	drawEllipsoid(4,0,0,1,2,2);
+	drawEllipsoid(4.5,0,.4,1,1.5,1.2);
+	drawHorns();
+	drawEars();
 	//Draw some legs
 	//Rear Leg
 	glPushMatrix();
@@ -182,8 +184,47 @@ void drawCow(){
 
 void drawHead(){
 	//Draw Ellipsoid
-
+	drawEllipsoid(4.5,0,.4,1,1.5,1.2);
 	//draw Triangle ears 
+	drawEars();
+}
+
+void drawHorns(){
+	glBegin(GL_POLYGON);
+	//yellow
+	glColor3f(1.0,1.0,0.0);
+	glVertex3f(4.5,1.4,0.4);
+	glVertex3f(4.5,0.4,0.4);
+	glVertex3f(4.5,1.0,2.0);
+	glEnd();
+	glBegin(GL_POLYGON);
+	//yellow
+	glColor3f(1.0,1.0,0.0);
+	glVertex3f(4.5,-1.4,0.4);
+	glVertex3f(4.5,-0.4,0.4);
+	glVertex3f(4.5,-1.0,2.0);
+	glEnd();
+	ErrCheck("DrawHorns");
+}
+
+void drawEars(){
+	glBegin(GL_POLYGON);
+	//Purple
+	glColor3f(1.0,0.0,1.0);
+	glVertex3f(4.5,1.2,1.0);
+	glVertex3f(4.5,1.2,0.4);
+	glVertex3f(4.5,2.0,0.4);
+	glVertex3f(4.5,2.0,0.6);
+	glEnd();
+	glBegin(GL_POLYGON);
+	//Purple
+	glColor3f(1.0,0.0,1.0);
+	glVertex3f(4.5,-1.2,1.0);
+	glVertex3f(4.5,-1.2,0.4);
+	glVertex3f(4.5,-2.0,0.4);
+	glVertex3f(4.5,-2.0,0.6);
+	glEnd();
+	ErrCheck("DrawEars");
 }
 
 void drawCowLegStraight(){

@@ -2,7 +2,9 @@
 * Keyboard Interface Functions 
 */
 
+#include <math.h>
 #include <GL/glut.h> //linux 
+#include "main.h"
 #include "keyboard.h"
 #include "rendering.h"
 #define GL_GLEXT_PROTOTYPES
@@ -19,7 +21,6 @@ double camera_yaw = 0;
 
 static double movespeed = 1;
 static double turnspeed = 1;
-
 
 /*
 * Function called by glut when special keys are pressed: 
@@ -39,7 +40,16 @@ void special(int key, int x, int y){
 	else if (key == GLUT_KEY_DOWN){
 		z_rotation_angle -= 2;
 	}
+	else if (key == GLUT_KEY_HOME){
+		if (mode == 0){
+			mode = 1;
+		}
+		else if (mode == 1){
+			mode = 0;
+		}
+	}
 	//Request display update
+	//Projection();
 	glutPostRedisplay();
 }
 
@@ -88,6 +98,7 @@ void key(unsigned char ch, int x, int y){
 	else if(ch == 'p'){
 		view_mode = 3;
 	}
+	//Projection();
 	//Tell GLUT it is necessary to redisplay the scene
 	glutPostRedisplay();
 }

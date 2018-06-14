@@ -7,7 +7,7 @@ extern double dim;   //  Size of world
 extern int mode;       //  Projection mode
 
 //Prototypes
-void reshape(int width,int height)
+void reshape(int width,int height);
 static void Projection();
 
 #endif

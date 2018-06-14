@@ -8,12 +8,13 @@
 #include <stdarg.h>
 #include <math.h>
 #include <GL/glut.h> //linux 
+#include "main.h"
 #include "keyboard.h"
 #include "rendering.h"
 
 int fov=55;       //  Field of view (for perspective)
 double asp=1;     //  Aspect ratio
-double dim=5.0;   //  Size of world
+double dim=7.0;   //  Size of world
 int mode=0;       //  Projection mode
 
 /*

@@ -8,6 +8,7 @@
 #include <math.h>
 #include "util.h"
 
+
 double* spherical2cartesianCoords(double r,double theta, double phi, double rx, double ry, double rz){
 	theta = deg2rad(theta);
 	phi = deg2rad(phi);
@@ -46,3 +47,8 @@ double rad2deg(double rad){
 	double deg = rad * 180/3.1415927;
 	return deg;
 }
+
+/*
+* We need to figure out how to determine the skeleton points on the cow and their locations and then draw the rest of the spots
+*/
+//Cow Leg Joints: Mid point upper leg, mid point of joint, mid point lower leg

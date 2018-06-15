@@ -14,7 +14,7 @@
 
 int fov=55;       //  Field of view (for perspective)
 double asp=1;     //  Aspect ratio
-double dim=7.0;   //  Size of world
+double dim=30.0;   //  Size of world
 int mode=0;       //  Projection mode
 
 /*
@@ -30,27 +30,6 @@ void reshape(int width,int height)
    glViewport(0,0, width,height);
    //  Set projection
    Projection();
-}
-
-/*
- *  Set projection
- */
-static void Projection()
-{
-   //  Tell OpenGL we want to manipulate the projection matrix
-   glMatrixMode(GL_PROJECTION);
-   //  Undo previous transformations
-   glLoadIdentity();
-   //  Perspective transformation
-   if (mode)
-      gluPerspective(fov,asp,dim/4,4*dim);
-   //  Orthogonal projection
-   else
-      glOrtho(-asp*dim,+asp*dim, -dim,+dim, -dim,+dim);
-   //  Switch to manipulating the model matrix
-   glMatrixMode(GL_MODELVIEW);
-   //  Undo previous transformations
-   glLoadIdentity();
 }
 
 /*

@@ -1,15 +1,10 @@
 //Includes
 #include "cow.h"
-#include "util.h"
-#include "primitives.h"
-#include "helper.h"
-#include <GL/glut.h> //linux
-#define GL_GLEXT_PROTOTYPES
 
 //COW CONSTANTS
-static double upper_leg_length = 1.0;
+static double upper_leg_length = 2.0;
 static double upper_leg_width = .25;
-static double lower_leg_length = 1.0;
+static double lower_leg_length = 2.0;
 static double lower_leg_width = .25;
 static double ankle_height = 0.25;
 
@@ -20,59 +15,6 @@ static double body_height = 1.5;
 static double head_length = 1;
 static double head_width = 1.5;
 static double head_height = 1.2;
-
-//Cow Leg Skeleton Information 
-struct cow_leg_skeleton{
-	struct vector3 upper_leg_pos;
-	struct vector3 lower_leg_pos;
-	struct vector3 knee_pos;
-	struct vector3 ankle_pos;
-
-	double upper_leg_angle;
-	double lower_leg_angle;
-};
-
-//Struct for the cow skeleton; one for each object
-struct cow_skeleton{
-	//Torso Skeleton
-	struct vector3 body_point; 
-	struct vector3 body_orientation;
-	//struct vector3 head_point; 
-	//Leg skeletons
-	struct cow_leg_skeleton LeftFrontLeg; 
-	struct cow_leg_skeleton RightFrontLeg;
-	struct cow_leg_skeleton LeftHindLeg; 
-	struct cow_leg_skeleton RightHindLeg;
-};
-
-//struct for the leg angles on the cow for a frame
-struct cow_frame{
-	double fl_cow_upper_leg_angle;
-	double fl_cow_lower_leg_angle;
-
-	double fr_cow_upper_leg_angle;
-	double fr_cow_lower_leg_angle;
-
-	double bl_cow_upper_leg_angle;
-	double bl_cow_lower_leg_angle;
-
-	double br_cow_upper_leg_angle;
-	double br_cow_lower_leg_angle;
-};
-
-struct cow_object{
-	//We need information to draw the object (MESH) (polygons, triangles, etc...)
-	//Information about where the object is (location and orientation)
-	//Information about the mesh collider 
-
-	//Object Name 
-	char *object_name;
-	//Object identifier
-	int object_identifier;
-	//Object type (Cow, Aircraft, Groundplane, Fence)
-	struct cow_skeleton skeleton;
-};
-
 
 void drawCowTest(int angle1,int angle2){
 	angle1 = angle1 - 90;
@@ -107,6 +49,64 @@ void drawCowTest(int angle1,int angle2){
 	glPushMatrix();
 	glTranslated(2.5,1,1); //Front Leg
 	drawCowLeg(*my_cow_leg);
+	glPopMatrix();
+}
+
+void renderCowObject(struct cow_object* my_cow_ptr){
+	struct cow_object my_cow = *my_cow_ptr; //hand off the cow object
+	struct cow_skeleton my_cow_skeleton = my_cow.skeleton; //hand off the cow skeleton 
+	//Determine movement of cow
+
+	//determine which frame to render (TBD)
+
+	//Calculate the skeletons
+	if(my_cow.new_frame){
+		calculateCowSkeleton(0,&my_cow_skeleton); //animation frame and skeleton ptr
+		my_cow.new_frame = 0;
+	}
+	//Render the cow
+	drawCow(my_cow_skeleton);
+	//Hand back the cow object
+	*my_cow_ptr = my_cow;
+}
+
+//----------------------------------------------------------------------------------
+//							DRAW COW FUNCTIONS
+//----------------------------------------------------------------------------------
+
+void drawCow(struct cow_skeleton my_cow_skeleton){
+	glPushMatrix();
+	glTranslated(my_cow_skeleton.body_point.x,my_cow_skeleton.body_point.y,my_cow_skeleton.body_point.z);
+	glRotated(my_cow_skeleton.body_orientation.z, 0.0,0.0,1.0);
+	//glRotatef(my_cow_skeleton.body_orientation.x,my_cow_skeleton.body_orientation.y,my_cow_skeleton.body_orientation.z);
+	drawCowTorso();
+	//Draw the head
+	glPushMatrix();
+	glTranslated(4.5,0,-0.4);
+	drawCowHead();
+	glPopMatrix();
+
+	//Now shift the cow leg
+	glPushMatrix();
+	glTranslated(-2.5,-1,1.8); //Rear Leg Coordinate?
+	drawCowLeg(my_cow_skeleton.LeftHindLeg);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(-2.5,1,1.8); //Rear Leg Coordinate?
+	drawCowLeg(my_cow_skeleton.RightHindLeg);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(2.5,-1,1.8); //Front Leg 
+	drawCowLeg(my_cow_skeleton.LeftFrontLeg);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(2.5,1,1.8); //Front Leg
+	drawCowLeg(my_cow_skeleton.RightFrontLeg);
+	glPopMatrix();
+
 	glPopMatrix();
 }
 
@@ -199,6 +199,11 @@ void drawEars(){
 	ErrCheck("DrawEars");
 }
 
+//----------------------------------------------------------------------------------
+//							SKELETON FUNCTIONS
+//----------------------------------------------------------------------------------
+
+
 void calculateCowLegSkeleton(double upper_leg_angle, double lower_leg_angle, struct cow_leg_skeleton *ptrleg){
 	struct cow_leg_skeleton leg = *ptrleg;
 
@@ -240,28 +245,39 @@ void calculateCowLegSkeleton(double upper_leg_angle, double lower_leg_angle, str
 	*ptrleg = leg;
 }
 
-void calculateCowSkeleton(struct cow_frame frame_angles, struct cow_skeleton thisCow){
-	//Figure out where the legs should be
-	//calculateCowLegSkeleton(frame_angles.fl_cow_upper_leg_angle,frame_angles.fl_cow_lower_leg_angle, thisCow.LeftFrontLeg); //FRONT LEFT
-	//calculateCowLegSkeleton(frame_angles.fr_cow_upper_leg_angle,frame_angles.fr_cow_lower_leg_angle, thisCow.RightFrontLeg); //FRONT RIGHT
-	//calculateCowLegSkeleton(frame_angles.bl_cow_upper_leg_angle,frame_angles.bl_cow_lower_leg_angle, thisCow.LeftHindLeg); //HIND LEFT
-	//calculateCowLegSkeleton(frame_angles.br_cow_upper_leg_angle,frame_angles.br_cow_lower_leg_angle, thisCow.LeftHindLeg); //HIND RIGHT
-	//Determine anything about the body? 
+void calculateCowSkeleton(int animation_frame, struct cow_skeleton *cow_skeleton_ptr){
+	struct cow_skeleton my_skeleton = *cow_skeleton_ptr;
+	//Using the animation frame, grab the corresponding skeleton frames
+
+	//Calcualte teh skeleton frames
+	calculateCowLegSkeleton(90,90,&(my_skeleton.LeftFrontLeg));
+	calculateCowLegSkeleton(90,90,&(my_skeleton.RightFrontLeg));
+	calculateCowLegSkeleton(90,90,&(my_skeleton.LeftHindLeg));
+	calculateCowLegSkeleton(90,90,&(my_skeleton.RightHindLeg));
 }
 
+//----------------------------------------------------------------------------------
+//							COW INITIALIZATION FUNCTIONS
+//----------------------------------------------------------------------------------
 
 void initializeCowObject(struct cow_object *ptrCow, int index){
 	cow_object thiscow = *ptrCow;
 	//First set the name and index
 	thiscow.object_name = "BasicCow";
 	thiscow.object_identifier = index;
+	thiscow.new_frame = 1;
 	//Next generate the center point of the cow
-	thiscow.skeleton.body_point.x = 0; 
-	thiscow.skeleton.body_point.y = 0;
-	thiscow.skeleton.body_point.z = 0; //offset based on height of cow
+	//COW LIMITS on position
+	thiscow.skeleton.body_point.x = random_at_most(60) - 30; //Should center around 0
+	thiscow.skeleton.body_point.y = random_at_most(60) - 30; //should center around 0
+	thiscow.skeleton.body_point.z = -3; //offset based on height of cow (TBD)
 	//Next generate the orientation point of the cow
 	thiscow.skeleton.body_orientation.x = 0; //ignore
 	thiscow.skeleton.body_orientation.y = 0; //ignore
-	thiscow.skeleton.body_orientation.z = 0; //yaw angle (heading of cow)
+	thiscow.skeleton.body_orientation.z = random_at_most(359); //yaw angle (heading of cow)
 	*ptrCow = thiscow;
 }
+
+//----------------------------------------------------------------------------------
+//							COW ANIMATION FUNCTIONS
+//----------------------------------------------------------------------------------

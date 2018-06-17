@@ -5,9 +5,11 @@
 
 //Global variables used in this file 
 extern int x_rotation_angle;
+extern int y_rotation_angle;
 extern int z_rotation_angle;
 extern int angle1;
 extern int angle2;
+extern int side; 
 extern int view_mode;
 extern double camera_x;
 extern double camera_y;

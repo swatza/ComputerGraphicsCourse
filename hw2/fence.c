@@ -7,35 +7,79 @@
 #define GL_GLEXT_PROTOTYPES
 
 //Constants
-static double post_height = 2.5;
+static double post_height = 7.0;
 static double post_width = 0.5;
 static double beam_width = 5.0;
 static double beam_height = 0.5;
 static double beam_length = 0.5; 
 
-static double post_spacing = 2; //units 
+static double post_spacing = 10; //units 
 
 //ASSUME A RECTANGULAR FENCE 
-void createFence(double x_posts, double y_posts, double max_x, double min_x, double max_y, double min_y){
-	//One Edge X
+void createFence(int x_posts, int y_posts, double max_x, double min_x, double max_y, double min_y){
+	//X EDGE POSTS
 	for (int i = 0; i < x_posts; i++){
 		glPushMatrix();
 		//move post into position
-		printf("The index is %i",i);
-		glTranslated(min_x + i*6,min_y,0);
+		glTranslated(min_x + i*post_spacing,min_y,-post_height/2);
 		//create the post
 		drawPost();
 		glPopMatrix();
-	}
-	//Other Edge X
-	for (int i = 0; i < x_posts; i++){
 		glPushMatrix();
 		//move post into position
-		glTranslated(min_x + i*6,max_y,0);
+		glTranslated(min_x + i*post_spacing,max_y,-post_height/2);
 		//create the post
 		drawPost();
 		glPopMatrix();
+	} 
+	//X EDGE BEAMS
+	for (int i = 0; i < x_posts -1; i++){
+		glPushMatrix();
+		glTranslated(min_x + post_spacing/2 + i*post_spacing,min_y,-2.5);
+		glRotated(90,0,0,1.0);
+		drawBeam();
+		glTranslated(0,0,-2.5);
+		drawBeam();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(min_x + post_spacing/2 + i*post_spacing,max_y,-2.5);
+		glRotated(90,0,0,1.0);
+		drawBeam();
+		glTranslated(0,0,-2.5);
+		drawBeam();
+		glPopMatrix();
 	}
+
+	//Y EDGE POSTS (do't render the corners since they are already drawn)
+	for (int i = 1; i < y_posts-1; i++){
+		glPushMatrix();
+		glTranslated(min_x,min_y + i*post_spacing,-post_height/2);
+		drawPost();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(max_x,min_y + i*post_spacing,-post_height/2);
+		drawPost();
+		glPopMatrix();
+	}
+	//Y EDGE BEAMS
+	for (int i = 0; i < y_posts -1; i++){
+		glPushMatrix();
+		glTranslated(min_x,min_y + post_spacing/2 + i*post_spacing,-2.5);
+		drawBeam();
+		glTranslated(0,0,-2.5);
+		drawBeam();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(max_x,min_y + post_spacing/2 + i*post_spacing,-2.5);
+		drawBeam();
+		glTranslated(0,0,-2.5);
+		drawBeam();
+		glPopMatrix();
+	}
+
 }
 
 

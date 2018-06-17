@@ -2,13 +2,9 @@
 /*
 * Converting a spherical coordinate to cartesian coordinate
 */
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <math.h>
 #include "util.h"
 
-
+//WEIRD BEHAVIOR AT CERTAIN POINTS; 90s 
 double* spherical2cartesianCoords(double r,double theta, double phi, double rx, double ry, double rz){
 	theta = deg2rad(theta);
 	phi = deg2rad(phi);
@@ -48,7 +44,24 @@ double rad2deg(double rad){
 	return deg;
 }
 
-/*
-* We need to figure out how to determine the skeleton points on the cow and their locations and then draw the rest of the spots
-*/
-//Cow Leg Joints: Mid point upper leg, mid point of joint, mid point lower leg
+// Assumes 0 <= max <= RAND_MAX
+// Returns in the closed interval [0, max]
+// Author: Ryan Reich from Stackoverflow
+long random_at_most(long max) {
+  unsigned long
+    // max <= RAND_MAX < ULONG_MAX, so this is okay.
+    num_bins = (unsigned long) max + 1,
+    num_rand = (unsigned long) RAND_MAX + 1,
+    bin_size = num_rand / num_bins,
+    defect   = num_rand % num_bins;
+
+  long x;
+  do {
+   x = random();
+  }
+  // This is carefully written not to overflow
+  while (num_rand - defect <= (unsigned long)x);
+
+  // Truncated division is intentional
+  return x/bin_size;
+}

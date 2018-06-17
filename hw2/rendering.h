@@ -6,8 +6,13 @@
 //Prototypes
 void display(); 
 void drawAxis();
-void printAngles();
+//void printAngles();
+void printModes();
+void printCameraPosition();
 void Print(const char* format, ...);
+
+void createObjects();
+void cleanObjects();
 
 
 #endif

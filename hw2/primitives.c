@@ -17,8 +17,7 @@ void drawVertex(double th,double ph){
 
 //Draw Plane
 void drawPlane(){
-	glBegin(GL_QUADS);
-	glColor3f(1,1,1);
+	glBegin(GL_QUADS);;
 	glVertex3f(1,1,0);
 	glVertex3f(1,-1,0);
 	glVertex3f(-1,-1,0);
@@ -99,7 +98,7 @@ void drawPyramid(){
 
 //Draw Cylinder
 void drawCylinder(){
-	const int d = 2;
+	const int d = 5;
 	int th;
 	double h = 1;
 	int r = 1;
@@ -151,7 +150,7 @@ void drawSphere(){
 
 //Draw Ellipsoid
 void drawEllipsoid(double a, double b, double c){
-	const int d=2; //spacing on angles
+	const int d=5; //spacing on angles
 	int th,ph;
 	glPushMatrix();
 	glScaled(a,b,c);

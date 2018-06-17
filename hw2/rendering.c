@@ -12,6 +12,7 @@
 #include "util.h"
 #include "primitives.h"
 #include "cow.h"
+#include "fence.h"
 #include "helper.h"
 #include "main.h"
 #define GL_GLEXT_PROTOTYPES
@@ -32,24 +33,94 @@ void display(){
 	//reset transformations
 	glLoadIdentity();
 	//Rotate the desired objects
+	glRotated(90,1.0,0.0,0.0);
 	if (mode){
+		//TODO Change this to first person look around
 		//PERSPECTIVE
-		double Ex = -2*dim*sin(deg2rad(x_rotation_angle))*cos(deg2rad(z_rotation_angle));
-		double Ey = +2*dim*sin(deg2rad(z_rotation_angle));
-		double Ez = +2*dim*cos(deg2rad(x_rotation_angle))*cos(deg2rad(z_rotation_angle));
-		gluLookAt(Ex,Ey,Ez,0,0,0,0,cos(deg2rad(z_rotation_angle)),0);
+		if (view_mode == 0){			
+			glRotated(-90,1.0,0.0,0.0);
+			if(z_rotation_angle > 88){
+				z_rotation_angle = 88; //limiting Z rotation
+			}
+			if(z_rotation_angle < 2){
+				z_rotation_angle = 2;
+			}
+			double* xyz = spherical2cartesianCoords(3*dim,z_rotation_angle,-x_rotation_angle,0,0,0);
+			double Ex = xyz[0];
+			double Ey = xyz[1];
+			double Ez = -xyz[2]; //flip sign ??
+			gluLookAt(Ex,Ey,Ez,0,0,0,0,0,-cos(deg2rad(z_rotation_angle)));
+			/* WORKING VERSION KIND OF
+			double* xy = polar2cartesianCoords(3*dim,x_rotation_angle);
+			double Ex = xy[0];
+			double Ey = xy[1];
+			double Ez = -1*dim;
+			gluLookAt(Ex,Ey,Ez,0,0,0,0,0,-1); */
+		}
+		//Circuling Aircraft 1
+		if (view_mode == 1){
+			//Get teh aircraf'ts position 
+			// Figure out the vector from the aircraft 
+			//looking out bottom
+			if(side == 0){
+				//Down Vector from teh aircraft 
+			}
+			//Looking out right 
+			else if(side == 1){
+				//Cross product of the down vector and forward vector (+ if Z up)
+			}
+			//looking out left
+			else if(side == 2){
+				//Cross product of th down vector and forward vector (- if Z up)
+			}
+			//gluLookAt(...);
+		}
+		//Circuling Aircraft 2
+		else if (view_mode == 2){
+			//Use the check from aircraft 1
+			//gluLookAt(...);
+		}
+		//First person walk around
+		else if (view_mode == 3){
+			glRotated(-90,1.0,0.0,0.0);
+			//Use the position 
+			double LAH_X = 1 * cos(deg2rad(camera_yaw)) + camera_x;
+			double LAH_Y = 1 * sin(deg2rad(camera_yaw)) + camera_y;
+			double LAH_Z = camera_z;
+			gluLookAt(camera_x,camera_y,camera_z,LAH_X,LAH_Y,LAH_Z,0,0,-1);
+			printCameraPosition();
+		}
 	}
 	else{
 		//ORTHOGONAL 
 		glRotatef(z_rotation_angle,1.0,0.0,0.0);
+		glRotatef(y_rotation_angle,0.0,1.0,0.0);
 		glRotatef(x_rotation_angle,0.0,0.0,1.0);
 	}
 	//Translate based on scale desired
 	//Draw the desired objects
-	//drawAxis();
-	createFence(2,2,10,-10,10,-10);
+	//-----------
+	// Draw Ground Plane
+	//-----------
+	glPushMatrix();
+	glScaled(51,51,0);
+	glColor3f(0.13,0.54,0.13);
+	drawPlane();
+	glPopMatrix();
+	//------------
+	// Draw Fence to border ground plane
+	//------------
+	createFence(11,11,50,-50,50,-50); //How big should the fence be? )
+	// -----------
+	// Draw Cows
+	// -----------
+	for (int i = 0; i < number_of_cows; i++){
+		renderCowObject(cows[i]);
+	}
 	//Print Angles;
-	printAngles();
+	//printAngles();
+	//Print Modes
+	printModes();
 	//Error Check
 	ErrCheck("display");
 	//flush and swap buffer
@@ -81,37 +152,63 @@ void drawAxis(){
 	ErrCheck("drawAxis");
 }
 
-/*
 //Create my rendering objects
 void createObjects(){
 	//How many cows do we want to create
+	cows = (struct cow_object**)malloc(sizeof(struct cow_object*));
 	//for i in number of cows
 	for (int i = 0; i < number_of_cows; i++){
 		//Initialize a cow object into memory
-		struct cow_object * mycow = malloc(sizeof(struct cow_object));
+		struct cow_object *my_cow_ptr = (struct cow_object*)malloc(sizeof(struct cow_object));
 		//Initialize the values for said cow object
-		initializeCowObject(mycow);
+		initializeCowObject(my_cow_ptr,i);
 		//create a cow object structure
-		//initialize it into memory
-		//add the address to the object to a global pointer of objects
+		cows[i] = my_cow_ptr;
 	}
-		//create a cow object structure
-		//Initialize it into memory
-		//add this location in memory to my pointer of objects
 	//How many airplanes do we want to create
 
-	//How many ... 
-} */
+} 
+
+void cleanObjects(){
+	for (int i =0; i < number_of_cows; i++){
+		free(cows[i]);
+		printf("We are now freeing the cow %i from the pen",i);
+	}
+	//free(cows);
+	printf("All cows are free");
+}
 
 /*
 * Used to print out the rotation angles in the bottom left 
 * Original by Willem A. (Vlakkies) Schreuder
 */
-void printAngles(){
-	//Five pixels from lower left corner of window
+void printModes(){
+	//int height = glutGet(GLUT_WINDOW_HEIGHT);
+	//int width = glutGet(GLUT_WINDOW_WIDTH);
+	glColor3f(1.0,1.0,1.0);
+	glWindowPos2i(5,50);
+	Print("CAMERA INFO");
+	glWindowPos2i(5,35);
+	Print("FOV: %i; DIM %f",fov,dim);
+	glWindowPos2i(5,20);
+	if (mode){
+		Print("Mode: PERSPECTIVE; View Mode: %i", view_mode);
+	}
+	else{
+		Print("Mode: ORTHOGONAL; View Mode: %i", view_mode);
+	}
 	glWindowPos2i(5,5);
 	//Print the text string
-	Print("Angle=%f,%f",x_rotation_angle,z_rotation_angle); 
+	Print("Global View Angle=%i,%i",x_rotation_angle,z_rotation_angle); 
+}
+
+void printCameraPosition(){
+	glColor3f(1.0,1.0,1.0);
+	int height = glutGet(GLUT_WINDOW_HEIGHT);
+	glWindowPos2i(5,height-15);
+	Print("Camera Position: %f, %f, %f", camera_x, camera_y, camera_z);
+	glWindowPos2i(5,height-30);
+	Print("Camera Direction: %f", camera_yaw);
 }
 
 /*

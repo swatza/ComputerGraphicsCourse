@@ -73,11 +73,22 @@ void special(int key, int x, int y){
 		mode = 1-mode; //borrowed from professor
 	}
 	//  PageUp key - increase dim
-   else if (key == GLUT_KEY_PAGE_UP)
-      dim += 0.1;
-   //  PageDown key - decrease dim
-   else if (key == GLUT_KEY_PAGE_DOWN && dim>1)
-      dim -= 0.1;
+	else if (key == GLUT_KEY_PAGE_UP)
+		dim += 0.1;
+	//  PageDown key - decrease dim
+	else if (key == GLUT_KEY_PAGE_DOWN && dim>1)
+		dim -= 0.1;
+	else if(key == GLUT_KEY_INSERT){
+		//Remaking objects
+		cleanObjects();
+		number_of_cows++;
+		createObjects();
+	}
+	else if(key == GLUT_KEY_END){
+		cleanObjects();
+		number_of_cows--;
+		createObjects();
+	}
 	//Keep within 360
 	x_rotation_angle %= 360;
 	z_rotation_angle %= 360;
@@ -96,7 +107,8 @@ void key(unsigned char ch, int x, int y){
 		exit(0);
 	//reset view position and parameters
 	else if (ch == 'r'){
-
+		cleanObjects();
+		createObjects();
 	}
 	//Move Forward in 1st Person
 	else if(ch == 'w'){
@@ -132,7 +144,7 @@ void key(unsigned char ch, int x, int y){
 		if(ch == '0'){
 			view_mode = 0;
 			fov = 55;
-		}
+		} /*
 		else if(ch == '1'){
 			//Switch to aircraft 1
 			view_mode = 1;
@@ -142,7 +154,7 @@ void key(unsigned char ch, int x, int y){
 			//switch to aircraft 2
 			view_mode = 2;
 			fov = 90;
-		}
+		} */
 		else if(ch == 'p'){
 			view_mode = 3;
 			fov = 35; // avoid min distance clipping

@@ -2,22 +2,23 @@
 #include "cow.h"
 
 //COW CONSTANTS
-static double upper_leg_length = 2.0;
-static double upper_leg_width = .25;
-static double lower_leg_length = 2.0;
-static double lower_leg_width = .25;
-static double ankle_height = 0.25;
+const double upper_leg_length = 1.0;
+const double upper_leg_width = .25;
+const double lower_leg_length = 1.0;
+const double lower_leg_width = .25;
+const double ankle_height = 0.25;
 
 const double cow_move_speed = .5;
 const double cow_buffer = 5.5;
+const double cow_z_offset = -3;
 
-static double body_length = 5;
-static double body_width = 2.0;
-static double body_height = 1.5;
+const double body_length = 5;
+const double body_width = 2.0;
+const double body_height = 1.5;
 
-static double head_length = 1;
-static double head_width = 1.5;
-static double head_height = 1.2;
+const double head_length = 1;
+const double head_width = 1.5;
+const double head_height = 1.2;
 /*
 static struct cow_frame frame0 = {.flcula=90,.flclla=90,.frcula=90,.frclla=90,.blcula=0,.blclla=0,.brcula=0,.blcula=0}; 
 static struct cow_frame frame1 = {.flcula=45,.flclla=90,.frcula=90,.frclla=90,.blcula=0,.blclla=0,.brcula=0,.blcula=0}; 
@@ -366,7 +367,7 @@ void initializeCowObject(struct cow_object *ptrCow, int index){
 	//COW LIMITS on position
 	thiscow.skeleton.body_point.x = random_at_most(60) - 30; //Should center around 0
 	thiscow.skeleton.body_point.y = random_at_most(60) - 30; //should center around 0
-	thiscow.skeleton.body_point.z = -5; //offset based on height of cow (TBD)
+	thiscow.skeleton.body_point.z = cow_z_offset; //offset based on height of cow (TBD)
 	//Next generate the orientation point of the cow
 	thiscow.skeleton.body_orientation.x = 0; //ignore
 	thiscow.skeleton.body_orientation.y = 0; //ignore

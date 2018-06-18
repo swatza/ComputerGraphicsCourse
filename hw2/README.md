@@ -1,12 +1,26 @@
-3D Viewing Assignment
+HW23D Viewing Assignment
 
-Creating a 3D Mesh that represents a section of the world from DEM (each vertex will be specified by the x,y,z from a Flat earth approximation)
-Create several aircraft that fly around (Use the dimensions of the talon)
-Allow for views from the aircraft (down, forward, left, right)
-Make some cows 
-Enable mouse projection and when you click on the cows they make a mooo noise
+Made a simple pen for some wandering cows as an example dealing with creating shapes, transforming and rotating them as well as
+having perspective and orthagonal views. 
 
-Allow for switching between orthographic and perspective 
-Allow for free movement in the scene with wasd keys and arrow keys to change orientation
+Spencer Watza
+CSCI 5229 Summer 2018
+
+Key Bindings:
+	Home		Switch between orthaganol or perspective
+	Page Up		Zoom in (Decrease Dimension)
+	Page Down	Zoom Out (Increase dimension)
+	0			Switch to God Mode
+	p 			Switch to first person mode
+	+/-			Change FoV 
+
+	r 			Reset random cows
+	insert		add another random cow (will auto-reset)
+	end			remove a random cow (will auto-reset)
+
+	w,s  		Move in first person mode toward camera direction
+	a,d 		Turn left or Right
+
+	Arrow keys	Change angle in overview vision mode
 
 Spencer watza

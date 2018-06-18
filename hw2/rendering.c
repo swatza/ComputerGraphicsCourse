@@ -3,22 +3,11 @@
 */
 
 //Includes
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <GL/glut.h> //linux 
 #include "rendering.h"
-#include "keyboard.h"
-#include "util.h"
-#include "primitives.h"
-#include "cow.h"
-#include "fence.h"
-#include "helper.h"
-#include "main.h"
-#define GL_GLEXT_PROTOTYPES
 
 //Global Variables
-int number_of_cows = 1;
+int number_of_cows = 2;
+//struct aircraft **airplanes;
 struct cow_object **cows; //list of cow objects
 struct mesh_collider **mc_fence;
 
@@ -120,6 +109,13 @@ void display(){
 		renderCowObject(cows[i]);
 	}
 	drawAxis();
+	// -----------
+	// Draw Aircraft
+	// -----------
+	/*
+	for (int i =0; i < 2; i++){
+		renderAircraftObject(airplanes[i]);
+	} */
 	//Print Angles;
 	//printAngles();
 	//Print Modes
@@ -171,6 +167,25 @@ void createObjects(){
 		cows[i] = my_cow_ptr;
 	}
 	//How many airplanes do we want to create
+	/*
+	double altitude[2];
+	altitude[0] = 20;
+	altitude[1] = 30;
+	double loiter_radius[2];
+	loiter_radius[0] = 70;
+	loiter_radius[1] = 40;
+	double velocity_scaler[2];
+	velocity_scaler[0] = 2;
+	velocity_scaler[1] = 1;
+
+	airplanes = (struct aircraft**)malloc(sizeof(struct aircraft*)*2);
+	for (int i =0; i < 2; i++){
+		//initialize aircraft into memory
+		struct aircraft *my_ac_ptr = (struct aircraft*)malloc(sizeof(struct aircraft));
+		//initialize the values  for aircraft
+		initializeLoiterDrone(my_ac_ptr,altitude[i],loiter_radius[i],velocity_scaler[i]);
+		airplanes[i] = my_ac_ptr;
+	} */
 
 	//Mesh Collider for Fence
 	/*
@@ -187,10 +202,10 @@ void createObjects(){
 void cleanObjects(){
 	for (int i =0; i < number_of_cows; i++){
 		free(cows[i]);
-		printf("We are now freeing the cow %i from the pen",i);
+		//printf("We are now freeing the cow %i from the pen\n",i);
 	}
 	//free(cows);
-	printf("All cows are free");
+	printf("All cows are free\n");
 }
 
 /*
@@ -207,10 +222,15 @@ void printModes(){
 	Print("FOV: %i; DIM %f",fov,dim);
 	glWindowPos2i(5,20);
 	if (mode){
-		Print("Mode: PERSPECTIVE; View Mode: %i", view_mode);
+		if(view_mode == 0){
+			Print("Mode: PERSPECTIVE; View Mode: WORLD");
+		}
+		else{
+			Print("Mode: PERSPECTIVE; View Mode: 1st Person");
+		}
 	}
 	else{
-		Print("Mode: ORTHOGONAL; View Mode: %i", view_mode);
+		Print("Mode: ORTHOGONAL; View Mode: WORLD");
 	}
 	glWindowPos2i(5,5);
 	//Print the text string

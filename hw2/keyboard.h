@@ -11,6 +11,7 @@ extern int angle1;
 extern int angle2;
 extern int side; 
 extern int view_mode;
+extern int axis_on;
 extern double camera_x;
 extern double camera_y;
 extern double camera_z;

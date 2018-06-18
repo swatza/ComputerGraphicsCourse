@@ -5,6 +5,9 @@
 #include "util.h"
 
 //WEIRD BEHAVIOR AT CERTAIN POINTS; 90s 
+/*
+* Function to convert spherical to cartesian coordinates
+*/
 double* spherical2cartesianCoords(double r,double theta, double phi, double rx, double ry, double rz){
 	theta = deg2rad(theta);
 	phi = deg2rad(phi);
@@ -21,6 +24,9 @@ double* spherical2cartesianCoords(double r,double theta, double phi, double rx, 
 	return retval; 
 }
 
+/*
+* function to convert polar to cartesian coordinates
+*/
 double* polar2cartesianCoords(double r, double theta){
 	theta = deg2rad(theta);
 	double x = r * cos(theta);

@@ -15,7 +15,9 @@ static double beam_length = 0.5;
 
 static double post_spacing = 10; //units 
 
-//ASSUME A RECTANGULAR FENCE 
+/*
+* Create a fence bounding a box
+*/
 void createFence(int x_posts, int y_posts, double max_x, double min_x, double max_y, double min_y){
 	//X EDGE POSTS
 	for (int i = 0; i < x_posts; i++){
@@ -82,7 +84,9 @@ void createFence(int x_posts, int y_posts, double max_x, double min_x, double ma
 
 }
 
-
+/*
+* Draw a fence beam
+*/
 void drawBeam(){
 	glPushMatrix();
 	glScaled(beam_length,beam_width,beam_height);
@@ -90,6 +94,9 @@ void drawBeam(){
 	glPopMatrix();
 }
 
+/* 
+* Draw a fence Post
+*/
 void drawPost(){
 	glPushMatrix();
 	glScaled(post_width,post_width,post_height);

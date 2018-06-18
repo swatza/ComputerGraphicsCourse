@@ -17,6 +17,7 @@ int angle1 = 0;
 int angle2 = 0;
 int side = 0;
 int view_mode = 0; //0 = overhead/god mode, 1 = aircraft 1, 2 = aircraft 2, 3 = first person
+int axis_on = 1;
 double camera_x = 0;
 double camera_y = 0; 
 double camera_z = -5; //default height of the camera
@@ -133,7 +134,10 @@ void key(unsigned char ch, int x, int y){
 		camera_y -= movespeed * sin(deg2rad(camera_yaw));
 		//angle1 -= 2;
 	}
-		//Dealing with FOV
+	else if(ch == 'm'){
+		axis_on = 1 - axis_on;
+	}
+	//Dealing with FOV
 	else if (ch == '-' && ch>1)
 		fov--;
 	else if (ch == '+' && ch<179)

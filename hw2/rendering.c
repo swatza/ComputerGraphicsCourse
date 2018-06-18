@@ -108,7 +108,9 @@ void display(){
 		//Check collisions here?
 		renderCowObject(cows[i]);
 	}
-	drawAxis();
+	if(axis_on){
+		drawAxis();
+	}
 	// -----------
 	// Draw Aircraft
 	// -----------
@@ -129,6 +131,11 @@ void display(){
 	main_new_frame = 0;
 }
 
+
+/*
+* Function to draw the X-Y-Z axis -> useful for checking
+* Original by Willem A. (Vlakkies) Schreuder
+*/
 void drawAxis(){
 	//default length
 	double len = dim;
@@ -153,7 +160,9 @@ void drawAxis(){
 	ErrCheck("drawAxis");
 }
 
-//Create my rendering objects
+/*
+* Function to instantiate my global object memory for cows and other future objects.
+*/
 void createObjects(){
 	//How many cows do we want to create
 	cows = (struct cow_object**)malloc(sizeof(struct cow_object*)*number_of_cows);
@@ -199,6 +208,9 @@ void createObjects(){
 
 } 
 
+/*
+* End program clean up just in case.
+*/
 void cleanObjects(){
 	for (int i =0; i < number_of_cows; i++){
 		free(cows[i]);
@@ -237,6 +249,9 @@ void printModes(){
 	Print("Global View Angle=%i,%i",x_rotation_angle,z_rotation_angle); 
 }
 
+/*
+* Function to provide camera location information in 1st person
+*/
 void printCameraPosition(){
 	glColor3f(1.0,1.0,1.0);
 	int height = glutGet(GLUT_WINDOW_HEIGHT);

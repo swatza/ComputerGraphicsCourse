@@ -50,7 +50,9 @@ static struct cow_frame frame8 = {.A1 = 0,.A2=-90};
 //150,150 F7- 90,90 //shift forward
 //90,180 F8 - 90,90 -> either to 1 or 0
 
-
+/*
+* Initial function to test drawing a cow and testing some of the memory tools
+*/
 void drawCowTest(int angle1,int angle2){
 	angle1 = angle1 - 90;
 	angle2 = angle2 - 90;
@@ -87,6 +89,10 @@ void drawCowTest(int angle1,int angle2){
 	glPopMatrix();
 }
 
+/*
+* Function called with an object to be rendered. Also calculates the location/skeleton of the object
+* IN FUTURE WORK MOVE SKELETON/MOVEMENT CALCULATION OUTSIDE OF DRAW CALLS (Do Pre-Rendering Work elsewhere)
+*/
 void renderCowObject(struct cow_object* my_cow_ptr){
 	struct cow_object my_cow = *my_cow_ptr; //hand off the cow object
 	struct cow_skeleton my_cow_skeleton = my_cow.skeleton; //hand off the cow skeleton 
@@ -156,6 +162,9 @@ void renderCowObject(struct cow_object* my_cow_ptr){
 //							DRAW COW FUNCTIONS
 //----------------------------------------------------------------------------------
 
+/*
+* Function to draw all parts of a cow
+*/
 void drawCow(struct cow_skeleton my_cow_skeleton){
 	glPushMatrix();
 	glTranslated(my_cow_skeleton.body_point.x,my_cow_skeleton.body_point.y,my_cow_skeleton.body_point.z);
@@ -192,10 +201,16 @@ void drawCow(struct cow_skeleton my_cow_skeleton){
 	glPopMatrix();
 }
 
+/*
+* Draw a cow torso
+*/
 void drawCowTorso(){
 	drawEllipsoid(body_length,body_width,body_height);
 }
 
+/*
+* Draw a cow's leg based on skeleton data of the join locations
+*/
 void drawCowLeg(struct cow_leg_skeleton leg){
 	//Using the angles and positions gathered from the skeleton leg
 	//printf("Upper Leg Position %f,0,%f\n",leg.upper_leg_pos.x, leg.upper_leg_pos.z);
@@ -234,6 +249,9 @@ void drawCowLeg(struct cow_leg_skeleton leg){
 
 }
 
+/*
+* Draw the cow head 
+*/
 void drawCowHead(){
 	drawEllipsoid(head_length,head_width,head_height);
 	glPushMatrix();
@@ -243,6 +261,9 @@ void drawCowHead(){
 	glPopMatrix();
 }
 
+/*
+* draw some baby horns on the cow
+*/
 void drawHorns(){
 	glBegin(GL_POLYGON);
 	//yellow
@@ -261,6 +282,9 @@ void drawHorns(){
 	ErrCheck("DrawHorns");
 }
 
+/*
+* Draw some baby ears on teh cow
+*/
 void drawEars(){
 	glBegin(GL_POLYGON);
 	//Purple
@@ -285,7 +309,9 @@ void drawEars(){
 //							SKELETON FUNCTIONS
 //----------------------------------------------------------------------------------
 
-
+/*
+* calculate the joint locations of the cow leg based on leg angles
+*/
 void calculateCowLegSkeleton(double upper_leg_angle, double lower_leg_angle, struct cow_leg_skeleton *ptrleg){
 	struct cow_leg_skeleton leg = *ptrleg;
 
@@ -327,6 +353,9 @@ void calculateCowLegSkeleton(double upper_leg_angle, double lower_leg_angle, str
 	*ptrleg = leg;
 }
 
+/*
+* Using the skeleton of a cow, figure out which frame (pose the cow's legs are in) and calculate the new skeleton pose
+*/
 void calculateCowSkeleton(int frl,int fll, int brl, int bll, struct cow_skeleton *cow_skeleton_ptr){
 	struct cow_skeleton my_skeleton = *cow_skeleton_ptr;
 	//Using the animation frame, grab the corresponding skeleton frames
@@ -351,6 +380,9 @@ void calculateCowSkeleton(int frl,int fll, int brl, int bll, struct cow_skeleton
 //							COW INITIALIZATION FUNCTIONS
 //----------------------------------------------------------------------------------
 
+/*
+* Simple random cow generation code that sets cow values and randomizes it into the pen
+*/
 void initializeCowObject(struct cow_object *ptrCow, int index){
 	cow_object thiscow = *ptrCow;
 	//First set the name and index
@@ -379,6 +411,9 @@ void initializeCowObject(struct cow_object *ptrCow, int index){
 //							COW ANIMATION FUNCTIONS
 //----------------------------------------------------------------------------------
 
+/*
+* A function to get the frame pose information based on frame number
+*/ 
 double getSkeletonAngle1FromFrame(int frameNumber){
 	double retval = 0;
 	switch(frameNumber){

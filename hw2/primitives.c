@@ -8,6 +8,10 @@
 #include "util.h"
 
 //draw a vertex in spherical coordinates (Probably just remove this)
+/*
+* Function to makea 3D vertex with color both based on the angles so it has some kind of appearance
+* Original by Willem A. (Vlakkies) Schreuder
+*/
 void drawVertex(double th,double ph){
 	//Draw Polar vertex
 	double* xyz = spherical2cartesianCoords(1,th,ph,0,0,0);
@@ -15,7 +19,9 @@ void drawVertex(double th,double ph){
 	glVertex3f(xyz[0],xyz[1],xyz[2]);
 }
 
-//Draw Plane
+/*
+* Draw a 2D Plane
+*/
 void drawPlane(){
 	glBegin(GL_QUADS);;
 	glVertex3f(1,1,0);
@@ -26,7 +32,10 @@ void drawPlane(){
 	ErrCheck("DrawPlane");
 }
 
-//Draw Cube
+/*
+* Draw a Cube 
+* Original by Willem A. (Vlakkies) Schreuder
+*/
 void drawCube(){
 	glBegin(GL_QUADS);
 	//  Front
@@ -70,7 +79,9 @@ void drawCube(){
 	ErrCheck("DrawCube");
 }
 
-//Draw Pyramid
+/*
+* Draw a Pyramid
+*/
 void drawPyramid(){
 	glBegin(GL_POLYGON);
 	glColor3f(1.0,0.0,0); glVertex3f(-0.5,0.5,0);
@@ -96,7 +107,9 @@ void drawPyramid(){
 	ErrCheck("DrawPyramid");
 }
 
-//Draw Cylinder
+/*
+* Draw a cylinder
+*/
 void drawCylinder(){
 	const int d = 5;
 	int th;
@@ -148,7 +161,10 @@ void drawSphere(){
 	drawEllipsoid(1,1,1);
 }
 
-//Draw Ellipsoid
+/*
+* Draw Ellipsoid
+* Original by Willem A. (Vlakkies) Schreuder
+*/
 void drawEllipsoid(double a, double b, double c){
 	const int d=5; //spacing on angles
 	int th,ph;
@@ -168,7 +184,10 @@ void drawEllipsoid(double a, double b, double c){
 	glPopMatrix();
 }
 
-//Draw Torus
+/*
+* Draw a Torus
+* TODO!
+*/ 
 void drawTorus(){
 
 }

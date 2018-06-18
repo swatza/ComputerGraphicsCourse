@@ -36,6 +36,12 @@ void reshape(int width,int height)
    Projection();
 }
 
+
+/*
+* An idle function to run only animate / draw on updated frames.
+* NEEDS LOTS OF OPTIMIZATION AND ARCHITECTURE CHANGES
+* Original by Willem A. (Vlakkies) Schreuder
+*/
 void idle()
 {
    //  Get elapsed (wall) time in seconds

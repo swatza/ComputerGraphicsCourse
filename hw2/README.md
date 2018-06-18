@@ -13,6 +13,7 @@ Key Bindings:
 	0			Switch to God Mode
 	p 			Switch to first person mode
 	+/-			Change FoV 
+	m			toggle axis
 
 	r 			Reset random cows
 	insert		add another random cow (will auto-reset)
@@ -24,3 +25,6 @@ Key Bindings:
 	Arrow keys	Change angle in overview vision mode
 
 Spencer watza
+Hours on assignment: ~18 hours spent mostly on figuring out how to make the cow look decent, figuring out 
+how to do animation(ish) and memory - object allocation. Some time was spent on trying to make world camera 
+mode operate desirably in perpspective. 

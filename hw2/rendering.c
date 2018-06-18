@@ -18,8 +18,9 @@
 #define GL_GLEXT_PROTOTYPES
 
 //Global Variables
-int number_of_cows = 3;
+int number_of_cows = 1;
 struct cow_object **cows; //list of cow objects
+struct mesh_collider **mc_fence;
 
 /*
 * Function called by GLUT to display/render the scene
@@ -115,8 +116,10 @@ void display(){
 	// Draw Cows
 	// -----------
 	for (int i = 0; i < number_of_cows; i++){
+		//Check collisions here?
 		renderCowObject(cows[i]);
 	}
+	drawAxis();
 	//Print Angles;
 	//printAngles();
 	//Print Modes
@@ -126,11 +129,13 @@ void display(){
 	//flush and swap buffer
 	glFlush();
 	glutSwapBuffers();
+	//Main new frame set back to 0
+	main_new_frame = 0;
 }
 
 void drawAxis(){
 	//default length
-	double len = 1.5;
+	double len = dim;
 	//set color
 	glColor3f(1,1,1); //whte
 	//Draw the 3 axeses
@@ -155,7 +160,7 @@ void drawAxis(){
 //Create my rendering objects
 void createObjects(){
 	//How many cows do we want to create
-	cows = (struct cow_object**)malloc(sizeof(struct cow_object*));
+	cows = (struct cow_object**)malloc(sizeof(struct cow_object*)*number_of_cows);
 	//for i in number of cows
 	for (int i = 0; i < number_of_cows; i++){
 		//Initialize a cow object into memory
@@ -166,6 +171,16 @@ void createObjects(){
 		cows[i] = my_cow_ptr;
 	}
 	//How many airplanes do we want to create
+
+	//Mesh Collider for Fence
+	/*
+	mc_fence = (struct mesh_collider*)malloc(sizeof(struct mesh_collider*)*4);
+	for (int i =0; i < 4; i++){
+		struct mesh_collider* mesh_ptr = (struct mesh_collider*)malloc(sizeof(struct mesh_collider));
+		struct mesh_collider thismesh = {.d=2,.w=52,.h=10}; //
+		*mesh_ptr = thismesh;
+		mc_fence[i] = mesh_ptr;
+	} */
 
 } 
 

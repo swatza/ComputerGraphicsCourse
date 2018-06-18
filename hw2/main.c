@@ -18,6 +18,8 @@ int fov=55;       //  Field of view (for perspective)
 double asp=1;     //  Aspect ratio
 double dim=68.0;   //  Size of world
 int mode=0;       //  Projection mode
+double last_time_frame = 0;
+int main_new_frame = 0;
 
 /*
  * This function is called by GLUT when the window is resized
@@ -32,6 +34,23 @@ void reshape(int width,int height)
    glViewport(0,0, width,height);
    //  Set projection
    Projection();
+}
+
+void idle()
+{
+   //  Get elapsed (wall) time in seconds
+   last_time_frame += glutGet(GLUT_ELAPSED_TIME)/1000.0;
+   // Do 1 frame a second for now 
+   if (last_time_frame >= 250){
+		//reset frame timer
+		last_time_frame = 0.0;
+		main_new_frame = 1;
+		glutPostRedisplay();
+   }
+   else{
+   		main_new_frame = 0;
+   		glutPostRedisplay();
+   }
 }
 
 /*
@@ -49,6 +68,7 @@ int main(int argc, char* argv[]){
 	glutCreateWindow("HW2: Spencer Watza"); //name homework assignment: your name
 	// Register rendering function, reshaping, and key callbacks
 	glutDisplayFunc(display);
+	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
 	glutSpecialFunc(special);
 	glutKeyboardFunc(key);

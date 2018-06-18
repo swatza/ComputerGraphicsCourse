@@ -7,6 +7,7 @@
 
 //Struct Definitions
 typedef struct vector3 vector3;
+typedef struct mesh_collider mesh_collider;
 
 //Prototypes
 double* spherical2cartesianCoords(double r, double theta, double phi, double rx,double ry,double rz);
@@ -22,5 +23,11 @@ struct vector3{
 	double z;
 };
 
+struct mesh_collider{
+	//RECTANGLE
+	double d;
+	double w;
+	double h;
+};
 
 #endif

@@ -134,8 +134,9 @@ void key(unsigned char ch, int x, int y){
 		camera_y -= movespeed * sin(deg2rad(camera_yaw));
 		//angle1 -= 2;
 	}
-	else if(ch == "m")
+	else if(ch == 'm'){
 		axis_on = 1 - axis_on;
+	}
 	//Dealing with FOV
 	else if (ch == '-' && ch>1)
 		fov--;

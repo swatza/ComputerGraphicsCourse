@@ -108,8 +108,9 @@ void display(){
 		//Check collisions here?
 		renderCowObject(cows[i]);
 	}
-	if(axis_on)
+	if(axis_on){
 		drawAxis();
+	}
 	// -----------
 	// Draw Aircraft
 	// -----------

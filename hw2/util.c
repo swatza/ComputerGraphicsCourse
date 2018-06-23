@@ -71,3 +71,28 @@ long random_at_most(long max) {
   // Truncated division is intentional
   return x/bin_size;
 }
+
+/*
+* Cross Product Vector Calculation of A x B
+*/
+
+struct vector3 normalizeVector(struct vector3 a){
+	double mag = (a.x*a.x) + (a.y*a.y) + (a.z * a.z);
+	static struct vector3 norm;
+	norm.x = a.x/mag;
+	norm.y = a.y/mag;
+	norm.z = a.z/mag;
+	return norm;
+}
+
+struct vector3 cross_product(struct vector3 a, struct vector3 b){
+	static struct vector3 c;
+	c.x = a.y*b.z - a.z*b.y; //j x k
+	c.y = a.z*b.x - a.x*b.z; //k x i
+	c.z = a.x*b.y - a.y*b.x; //i x j
+	return c;
+}
+
+double dot_product(struct vector3 A, struct vector3 B){
+	return a.x * b.x + a.y * b.y + a.z * b.z;
+}

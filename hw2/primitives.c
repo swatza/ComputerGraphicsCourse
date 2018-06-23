@@ -15,6 +15,7 @@
 void drawVertex(double th,double ph){
 	//Draw Polar vertex
 	double* xyz = spherical2cartesianCoords(1,th,ph,0,0,0);
+	glNormal3f(cos(deg2rad(th))*sin(deg2rad(ph)),cos(deg2rad(th))*cos(deg2rad(ph)),sin(th);
 	glColor3f(xyz[2],sin(deg2rad(ph)) * sin(deg2rad(ph)), sin(deg2rad(th)) * sin(deg2rad(th)));
 	glVertex3f(xyz[0],xyz[1],xyz[2]);
 }
@@ -24,9 +25,16 @@ void drawVertex(double th,double ph){
 */
 void drawPlane(){
 	glBegin(GL_QUADS);;
+	glNormal3f(0,0,1);
 	glVertex3f(1,1,0);
+
+	glNormal3f(0,0,1);
 	glVertex3f(1,-1,0);
+
+	glNormal3f(0,0,1);
 	glVertex3f(-1,-1,0);
+
+	glNormal3f(0,0,1);
 	glVertex3f(-1,1,0);
 	glEnd();
 	ErrCheck("DrawPlane");
@@ -40,36 +48,42 @@ void drawCube(){
 	glBegin(GL_QUADS);
 	//  Front
 	glColor3f(1,0,0);
+	glNormal3f(0,0,1);
 	glVertex3f(-1,-1, 1);
 	glVertex3f(+1,-1, 1);
 	glVertex3f(+1,+1, 1);
 	glVertex3f(-1,+1, 1);
 	//  Back
 	glColor3f(0,0,1);
+	glNormal3f(0,0,-1);
 	glVertex3f(+1,-1,-1);
 	glVertex3f(-1,-1,-1);
 	glVertex3f(-1,+1,-1);
 	glVertex3f(+1,+1,-1);
 	//  Right
 	glColor3f(1,1,0);
+	glNormal3f(1,0,0);
 	glVertex3f(+1,-1,+1);
 	glVertex3f(+1,-1,-1);
 	glVertex3f(+1,+1,-1);
 	glVertex3f(+1,+1,+1);
 	//  Left
 	glColor3f(0,1,0);
+	glNormal3f(-1,0,0);
 	glVertex3f(-1,-1,-1);
 	glVertex3f(-1,-1,+1);
 	glVertex3f(-1,+1,+1);
 	glVertex3f(-1,+1,-1);
 	//  Top
 	glColor3f(0,1,1);
+	glNormal3f(0,1,0);
 	glVertex3f(-1,+1,+1);
 	glVertex3f(+1,+1,+1);
 	glVertex3f(+1,+1,-1);
 	glVertex3f(-1,+1,-1);
 	//  Bottom
 	glColor3f(1,0,1);
+	glNormal3f(0,-1,0);
 	glVertex3f(-1,-1,-1);
 	glVertex3f(+1,-1,-1);
 	glVertex3f(+1,-1,+1);
@@ -84,25 +98,31 @@ void drawCube(){
 */
 void drawPyramid(){
 	glBegin(GL_POLYGON);
-	glColor3f(1.0,0.0,0); glVertex3f(-0.5,0.5,0);
-	glColor3f(1.0,0.0,0); glVertex3f(0.5,0.5,0);
-	glColor3f(1.0,0.0,0); glVertex3f(0.0,0.0,0.5);
+	glNormal3f(0,2,2);
+	glColor3f(1.0,0.0,0); glVertex3f(-1,1,0);
+	glColor3f(1.0,0.0,0); glVertex3f(1,1,0);
+	glColor3f(1.0,0.0,0); glVertex3f(0.0,0.0,1);
 	glEnd();
+
 	glBegin(GL_POLYGON);
-	glColor3f(0.0,1.0,0); glVertex3f(-0.5,0.5,0);
-	glColor3f(0.0,1.0,0); glVertex3f(0.0,-0.5,0);
-	glColor3f(0.0,1.0,0); glVertex3f(0.0,0.0,0.5);
+	glNormal3f(0,1,1);
+	glColor3f(0.0,1.0,0); glVertex3f(-1,1,0);
+	glColor3f(0.0,1.0,0); glVertex3f(0.0,-1,0);
+	glColor3f(0.0,1.0,0); glVertex3f(0.0,0.0,1);
 	glEnd();
+
 	glBegin(GL_POLYGON);
-	glColor3f(0.0,0.0,1.0); glVertex3f(0.5,0.5,0);
-	glColor3f(0.0,0.0,1.0); glVertex3f(0.0,-0.5,0);
-	glColor3f(0.0,0.0,1.0); glVertex3f(0.0,0.0,0.5);
+	glNormal3f(0,-1,-1);
+	glColor3f(0.0,0.0,1.0); glVertex3f(1,1,0);
+	glColor3f(0.0,0.0,1.0); glVertex3f(0.0,-1,0);
+	glColor3f(0.0,0.0,1.0); glVertex3f(0.0,0.0,1);
 	glEnd();
 	//Bottom
 	glBegin(GL_POLYGON);
-	glColor3f(1.0,1.0,0); glVertex3f(-0.5,0.5,0);
-	glColor3f(1.0,1.0,0); glVertex3f(0.5,0.5,0);
-	glColor3f(1.0,1.0,0); glVertex3f(0.0,-0.5,0.0);
+	glNormal3f(0,0,-1);
+	glColor3f(1.0,1.0,0); glVertex3f(-1,1,0);
+	glColor3f(1.0,1.0,0); glVertex3f(1,1,0);
+	glColor3f(1.0,1.0,0); glVertex3f(0.0,-1,0.0);
 	glEnd();
 	ErrCheck("DrawPyramid");
 }
@@ -119,6 +139,7 @@ void drawCylinder(){
 	//Draw Top
 	glBegin(GL_TRIANGLE_FAN);
 	//Draw center point
+	glNormal3f(0,0,1);
 	glColor3f(1.0,0.0,0.0);
 	glVertex3f(0,0,h/2);
 	//loop through
@@ -134,6 +155,10 @@ void drawCylinder(){
 	glColor3f(0.0,1.0,0.0);
 	for (th=0;th<=360;th+=d){
 		xyz = polar2cartesianCoords(r,th);
+		//What is the normal?
+
+		//TODO DO THE NORMAL
+		glNormal3f(cos(deg2rad(th)),sin(deg2rad(th)),0); //IS THIS RIGHT?
 		glVertex3f(xyz[0],xyz[1],h/2);
 		glVertex3f(xyz[0],xyz[1],-h/2);
 	}
@@ -143,6 +168,7 @@ void drawCylinder(){
 	//Draw Bottom  *BLUE*
 	glBegin(GL_TRIANGLE_FAN);
 	//Draw center point;
+	glNormal3f(0,0,-1);
 	glColor3f(0.0,0.0,1.0);	
 	glVertex3f(0,0,-h/2);
 	//Loop through

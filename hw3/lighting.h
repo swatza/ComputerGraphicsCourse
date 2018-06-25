@@ -1,6 +1,10 @@
 #ifndef LIGHTING_H
 #define LIGHTING_H
 
+#define GL_GLEXT_PROTOTYPES
+#include <GL/glut.h> 		//linux
+#include "util.h"
+
 //global variables
 extern GLenum lightEnumerations[];
 
@@ -8,7 +12,7 @@ extern GLenum lightEnumerations[];
 typedef struct light light;
 
 //Prototypes
-createLightObj(struct *light my_light_ptr, GLenum lightObj);
+void createLightObj(struct light* my_light_ptr, GLenum lightObj);
 void moveLightPosition(struct light* my_light_ptr, struct vector3 new_position);
 void moveLightSpotDirection(struct light* my_light_ptr, float* v);
 void makeLightAmbient(struct light* my_light_ptr, float* v);

@@ -3,9 +3,9 @@
 
 #clean:
 #	rm -f hw1 *.o *.a
-#HW1
-EXE=hw2
-SOURCES=main.c keyboard.c rendering.c util.c primitives.c cow.c helper.c fence.c 
+#HW3
+EXE=hw3
+SOURCES=main.c keyboard.c rendering.c util.c primitives.c cow.c helper.c fence.c lighting.c materials.c loadtexbmp.c
 OBJECTS=$(SOURCES:.c=.o)
 
 all: $(SOURCES) $(EXE)

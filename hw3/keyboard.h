@@ -13,7 +13,7 @@ extern int z_rotation_angle;
 extern int view_mode;
 extern int axis_on;
 extern int shape;
-extern int texture;
+extern int textureFlag;
 
 extern double camera_x;
 extern double camera_y;

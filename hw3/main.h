@@ -12,6 +12,7 @@
 #include "rendering.h"
 #include "materials.h"
 #include "lighting.h"
+#include "file_loader.h"
 
 //Global Variables
 extern int fov;       //  Field of view (for perspective)
@@ -21,6 +22,7 @@ extern int mode;       //  Projection mode
 extern double last_time_frame; // time since last new frame
 extern int main_new_frame; //flag saying its time to render a new animation key frame
 extern int zh;
+extern unsigned int texture[];
 
 //Prototypes
 void reshape(int width,int height);

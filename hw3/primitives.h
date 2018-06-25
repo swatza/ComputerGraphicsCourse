@@ -10,7 +10,7 @@
 
 //Prototypes
 void drawVertex(double th,double ph);
-void drawPlane();
+void drawPlanewTexture(unsigned int texture);
 void drawCube();
 void drawPyramid();
 void drawCylinder();

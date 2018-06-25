@@ -19,17 +19,18 @@ const static float grass_specular[4] = {0.0,0.0,0.0,1.0};
 const static float grass_emission[4] = {0.0,0.0,0.0,1.0};
 const static int grass_shiny = 0;
 // ---------- Fence -----------
-const static float grass_ambient[4] = {0.1,0.1,0.1,1.0};
-const static float grass_diffuse[4] = {0.6,0.6,0.6,1.0};
-const static float grass_specular[4] = {0.0,0.0,0.0,1.0};
-const static float grass_emission[4] = {0.0,0.0,0.0,1.0};
-const static int grass_shiny = 0;
+const static float fence_ambient[4] = {0.1,0.1,0.1,1.0};
+const static float fence_diffuse[4] = {0.6,0.6,0.6,1.0};
+const static float fence_specular[4] = {0.0,0.0,0.0,1.0};
+const static float fence_emission[4] = {0.0,0.0,0.0,1.0};
+const static int fence_shiny = 0;
 // ---------- Cow -----------
-const static float grass_ambient[4] = {0.1,0.1,0.1,1.0};
-const static float grass_diffuse[4] = {0.8,0.8,0.8,1.0};
-const static float grass_specular[4] = {0.0,0.0,0.0,1.0};
-const static float grass_emission[4] = {0.0,0.0,0.0,1.0};
-const static int grass_shiny = 0;
+const static float cow_ambient[4] = {0.1,0.1,0.1,1.0};
+const static float cow_diffuse[4] = {0.8,0.8,0.8,1.0};
+const static float cow_specular[4] = {0.0,0.0,0.0,1.0};
+const static float cow_emission[4] = {0.0,0.0,0.0,1.0};
+const static int cow_shiny = 0;
+
 
 /*
 * Function called by GLUT to display/render the scene
@@ -96,7 +97,7 @@ void display(){
 		//Enable 
 		glEnable(GL_LIGHTING);
 		//Location of viewer for specular calculations
-		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,local);
+		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,0); //parallel to the z thing (rather than with eye)
 		//  glColor sets ambient and diffuse color materials
         glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL);
@@ -108,12 +109,14 @@ void display(){
 			glEnable(lightEnumerations[i]);
 			//Make a ball for it (placeholder!)
 			glPushMatrix();
-			glTranslated(...);
+			//Put it in the correct spot 
+			glTranslated(0,0,30);
 			glScaled(0.1,0.1,0.1);
-			//Set Material!
-			setMaterials(...); //materials.h function
+			//Draw representative sphere
 			drawSphere();
 			glPopMatrix();
+			//Set the lighting on
+			performLighting(lights[i]);
 		}
 	}
 	else{
@@ -121,7 +124,7 @@ void display(){
     }
 	
 	//Are we using textures
-	if(ntex < 0)
+	if(textureFlag == 0)
 		glDisable(GL_TEXTURE_2D);
 	else{
 		//Enable textures
@@ -214,7 +217,7 @@ void createObjects(){
 		cows[i] = my_cow_ptr;
 	}
 	//How many Lights do we want to create??
-	lights = (struct light**)malloc(sizeof(struct light*) * numbember_of_lights;
+	lights = (struct light**)malloc(sizeof(struct light*) * number_of_lights);
 	//for i in number of lights
 	for (int i =0; i<number_of_lights;i++){
 		//initialize a light object into memory
@@ -234,7 +237,7 @@ void cleanObjects(){
 	}
 	//free(cows);
 	printf("All cows are free\n");
-	for (int i=0; i < numbember_of_lights; i++){
+	for (int i=0; i < number_of_lights; i++){
 		free(lights[i]);
 	}
 }

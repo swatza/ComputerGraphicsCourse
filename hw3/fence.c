@@ -18,20 +18,20 @@ const static double post_spacing = 10; //units
 /*
 * Create a fence bounding a box
 */
-void createFence(int x_posts, int y_posts, double max_x, double min_x, double max_y, double min_y){
+void createFence(int x_posts, int y_posts, double max_x, double min_x, double max_y, double min_y, unsigned int postT1, unsigned int postT2, unsigned int beamT1, unsigned int beamT2){
 	//X EDGE POSTS
 	for (int i = 0; i < x_posts; i++){
 		glPushMatrix();
 		//move post into position
 		glTranslated(min_x + i*post_spacing,min_y,-post_height/2);
 		//create the post
-		drawPost();
+		drawPost(postT1, postT2);
 		glPopMatrix();
 		glPushMatrix();
 		//move post into position
 		glTranslated(min_x + i*post_spacing,max_y,-post_height/2);
 		//create the post
-		drawPost();
+		drawPost(postT1, postT2);
 		glPopMatrix();
 	} 
 	//X EDGE BEAMS
@@ -39,17 +39,17 @@ void createFence(int x_posts, int y_posts, double max_x, double min_x, double ma
 		glPushMatrix();
 		glTranslated(min_x + post_spacing/2 + i*post_spacing,min_y,-2.5);
 		glRotated(90,0,0,1.0);
-		drawBeam();
+		drawBeam(beamT1, beamT2);
 		glTranslated(0,0,-2.5);
-		drawBeam();
+		drawBeam(beamT1, beamT2);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslated(min_x + post_spacing/2 + i*post_spacing,max_y,-2.5);
 		glRotated(90,0,0,1.0);
-		drawBeam();
+		drawBeam(beamT1, beamT2);
 		glTranslated(0,0,-2.5);
-		drawBeam();
+		drawBeam(beamT1, beamT2);
 		glPopMatrix();
 	}
 
@@ -57,28 +57,28 @@ void createFence(int x_posts, int y_posts, double max_x, double min_x, double ma
 	for (int i = 1; i < y_posts-1; i++){
 		glPushMatrix();
 		glTranslated(min_x,min_y + i*post_spacing,-post_height/2);
-		drawPost();
+		drawPost(postT1, postT2);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslated(max_x,min_y + i*post_spacing,-post_height/2);
-		drawPost();
+		drawPost(postT1, postT2);
 		glPopMatrix();
 	}
 	//Y EDGE BEAMS
 	for (int i = 0; i < y_posts -1; i++){
 		glPushMatrix();
 		glTranslated(min_x,min_y + post_spacing/2 + i*post_spacing,-2.5);
-		drawBeam();
+		drawBeam(beamT1, beamT2);
 		glTranslated(0,0,-2.5);
-		drawBeam();
+		drawBeam(beamT1, beamT2);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslated(max_x,min_y + post_spacing/2 + i*post_spacing,-2.5);
-		drawBeam();
+		drawBeam(beamT1, beamT2);
 		glTranslated(0,0,-2.5);
-		drawBeam();
+		drawBeam(beamT1, beamT2);
 		glPopMatrix();
 	}
 
@@ -151,7 +151,7 @@ void drawBeam(unsigned int beamside, unsigned int beamtop){
 /* 
 * Draw a fence Post
 */
-void drawPost(unsigned int postTop, unsigned int postSide){
+void drawPost(unsigned int postSide, unsigned int postTop){
 	glPushMatrix();
 	
 	glScaled(post_width,post_width,post_height);
@@ -168,9 +168,9 @@ void drawPost(unsigned int postTop, unsigned int postSide){
 	glTexCoord2f(0.5,0.5); glVertex3f(0,0,h/2);
 	//Loop through
 	for(th = 0; th<=360;th+=d){
-		xyz = polar2ccartesianCoords(r,th);
+		xyz = polar2cartesianCoords(r,th);
 		glNormal3f(0,0,1);
-		glTexCoord2f(0.5+0.5*xyz[0], 0.5+0.5*xyz[1]); glVertex3f(xyz[0],xyz[1[,h/2);
+		glTexCoord2f(0.5+0.5*xyz[0], 0.5+0.5*xyz[1]); glVertex3f(xyz[0],xyz[1],h/2);
 	}
 	glEnd();
 	
@@ -178,7 +178,7 @@ void drawPost(unsigned int postTop, unsigned int postSide){
 	//Draw Side
 	glBegin(GL_QUAD_STRIP);
 	for(th=0;th<=360;th+=d){
-		xyz = polar2ccartesianCoords(r,th);
+		xyz = polar2cartesianCoords(r,th);
 		glNormal3f(xyz[0],xyz[1],0);
 		glTexCoord2f(th/360,1.0); glVertex3f(xyz[0],xyz[1],h/2);
 		glTexCoord2f(th/360,0.0); glVertex3f(xyz[0],xyz[1],-h/2);

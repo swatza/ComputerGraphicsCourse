@@ -12,7 +12,7 @@ const float default_light_specular[] = {0.0,0.0,0.0,1.0};
 
 //Create an object to keep track of the parameters for the spotlight; initialize to defaults
 //Make sure to enable the light beforehand
-createLightObj(struct *light my_light_ptr, GLenum lightObj){
+void createLightObj(struct light* my_light_ptr, GLenum lightObj){
 	struct light my_light = *my_light_ptr;
 	my_light.thisLight = lightObj;
 	memcpy(my_light.ambient, default_light_ambient, sizeof(default_light_ambient));
@@ -63,14 +63,14 @@ void makeLightSpecular(struct light* my_light_ptr, float*v){
 void performLighting(struct light* my_light_ptr){
 	struct light this_light = *my_light_ptr;
 	//enable the light
-	glEnable(this_light.thisLight;
+	glEnable(this_light.thisLight);
 	//set each of the values
 	setLightAmbient(this_light.thisLight, this_light.ambient);
 	setLightDiffuse(this_light.thisLight, this_light.diffuse);
 	setLightSpecular(this_light.thisLight, this_light.specular);
 	setLightPosition(this_light.thisLight, this_light.position);
 	//if this is a spot light, set the direciton 
-	if(light.position[3] == 1){
+	if(this_light.position[3] == 1){
 		setLightSpotDirection(this_light.thisLight, this_light.spot_direction);
 	}
 }

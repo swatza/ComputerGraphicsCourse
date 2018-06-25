@@ -7,6 +7,9 @@
 #include "helper.h"
 #include "util.h"
 
+//Constants for rendering
+const int d = 5;
+
 
 // Check Normals
 // Draw new shapes 
@@ -20,7 +23,7 @@
 void drawVertex(double th,double ph){
 	//Draw Polar vertex
 	double* xyz = spherical2cartesianCoords(1,th,ph,0,0,0);
-	glNormal3(xyz[0],xyz[1],xyz[2]);
+	glNormal3f(xyz[0],xyz[1],xyz[2]);
 	glVertex3f(xyz[0],xyz[1],xyz[2]);
 }
 
@@ -30,7 +33,7 @@ void drawVertex(double th,double ph){
 void drawPlanewTexture(unsigned int texture){
 	glBindTexture(GL_TEXTURE_2D,texture);
 	
-	glBegin(GL_QUADS);;
+	glBegin(GL_QUADS);
 	glNormal3f(0,0,1);
 	glTexCoord2f(1.0,1.0); glVertex3f(1,1,0);
 	
@@ -110,7 +113,6 @@ void drawRectangularPyramid(){
 * Draw a cylinder
 */
 void drawCylinder(){
-	const int d = 5;
 	int th;
 	double h = 1;
 	int r = 1;
@@ -135,7 +137,7 @@ void drawCylinder(){
 	glColor3f(0.0,1.0,0.0);
 	for (th=0;th<=360;th+=d){
 		xyz = polar2cartesianCoords(r,th);
-		glNormal3f(cos(xyz[0],xyz[1],0); //IS THIS RIGHT?
+		glNormal3f(xyz[0],xyz[1],0); //IS THIS RIGHT?
 		glVertex3f(xyz[0],xyz[1],h/2);
 		glVertex3f(xyz[0],xyz[1],-h/2);
 	}
@@ -165,12 +167,16 @@ void drawCylinder(){
 * Like a cylinder, except that there is no caps and there is no thickness
 */
 void drawPipe(){
+	double r = 1;
+	double h = 1;
+	double th;
+	double* xyz;
 	//Draw Middle *GREEN*
 	glBegin(GL_QUAD_STRIP);
 	glColor3f(0.0,1.0,0.0);
 	for (th=0;th<=360;th+=d){
 		xyz = polar2cartesianCoords(r,th);
-		glNormal3f(cos(xyz[0],xyz[1],0); //IS THIS RIGHT?
+		glNormal3f(xyz[0],xyz[1],0); //IS THIS RIGHT?
 		glVertex3f(xyz[0],xyz[1],h/2);
 		glVertex3f(xyz[0],xyz[1],-h/2);
 	}
@@ -193,7 +199,6 @@ void drawSphere(){
 * Original by Willem A. (Vlakkies) Schreuder
 */
 void drawEllipsoid(double a, double b, double c){
-	const int d=5; //spacing on angles
 	int th,ph;
 	glPushMatrix();
 	glScaled(a,b,c);

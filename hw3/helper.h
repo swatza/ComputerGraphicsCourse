@@ -3,6 +3,7 @@
 
 //Prototypes
 void ErrCheck(char* where);
+void Fatal(const char* format , ...);
 
 
 #endif

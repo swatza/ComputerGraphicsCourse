@@ -1,6 +1,11 @@
 #ifndef MATERIALS_H
 #define MATERIALS_H
 
+//INCLUDES
+#define GL_GLEXT_PROTOTYPES
+#include <GL/glut.h> 		//linux
+#include "util.h"
+
 //CONST
 const static float default_ambient[4] = {0.2,0.2,0.2,1.0};
 const static float default_diffuse[4] = {0.8,0.8,0.8,1.0};

@@ -19,7 +19,7 @@ int view_mode = 0; //0 = overhead/god mode, 1st Person
 int axis_on = 1;
 //Which shape to draw
 int shape = 0;
-int texture = 0;
+int textureFlag = 1;
 
 //Add lighting variable here
 int lightingOn = 1;
@@ -141,7 +141,7 @@ void key(unsigned char ch, int x, int y){
 	}
 	//Toggle texture
 	else if(ch == 't'){
-
+		textureFlag = 1 - textureFlag;
 	}
 	//Toggle shape
 	else if(ch == 'p'){

@@ -8,15 +8,15 @@
 
 void setMaterials(int faceFlag, float* ambient, float* diffuse, float* specular, float* emission, int shinny){
 	//Ambient
-	setAmbient(ambient);
+	setMaterialAmbient(ambient);
 	//Diffuse
-	setDiffuse(diffuse);
+	setMaterialDiffuse(diffuse);
 	//Specular
-	setSpecular(specular);
+	setMaterialSpecular(specular);
 	//Emission
-	setEmission(emission);
+	setMaterialEmission(emission);
 	//Shinness
-	setShine(shinny);
+	setMaterialShine(shinny);
 }
 
 void setMaterialShine(int v){
@@ -24,7 +24,7 @@ void setMaterialShine(int v){
 }
 
 void setMaterialEmission(float* v){
-	glMaterialfv(GL_FRONT,GL_EMISSION, v)
+	glMaterialfv(GL_FRONT,GL_EMISSION, v);
 }
 
 void setMaterialSpecular(float* v){

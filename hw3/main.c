@@ -41,7 +41,7 @@ void idle()
 {
    //  Get elapsed (wall) time in seconds
    double t =  glutGet(GLUT_ELAPSED_TIME)/5000.0; //better way to do this with actual system time so we can do pre-frame drawing calculations
-   zh = fmod(90*t,360.0);
+   //zh = fmod(90*t,360.0);
    glutPostRedisplay();
    // Do 1 frame a second for now 
    /*

@@ -4,23 +4,18 @@
 //INCLUDES
 #define GL_GLEXT_PROTOTYPES
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <math.h>
-#include <stdlib.h>
-#include <time.h>
-#include <GL/glut.h> //linux 
 #include "main.h"
-#include "keyboard.h"
-#include "rendering.h"
 
-int fov=55;       //  Field of view (for perspective)
-double asp=1;     //  Aspect ratio
-double dim=3;//68.0;   //  Size of world
-int mode=1;       //  Projection mode (Always Perspective)
+
+int fov=55;       				//  Field of view (for perspective)
+double asp=1;     				//  Aspect ratio
+double dim=68;//68.0;   		//  Size of world
+int mode=1;       				//  Projection mode (Always Perspective)
 double last_time_frame = 0;
 int main_new_frame = 0;
-int zh = 90;  // Light azimuth
+int zh = 90;  					// Light azimuth
+
+unsigned int texture[5]; 		// Texture Names
 
 /*
  * This function is called by GLUT when the window is resized
@@ -37,7 +32,6 @@ void reshape(int width,int height)
    Projection();
 }
 
-
 /*
 * An idle function to run only animate / draw on updated frames.
 * NEEDS LOTS OF OPTIMIZATION AND ARCHITECTURE CHANGES
@@ -46,7 +40,7 @@ void reshape(int width,int height)
 void idle()
 {
    //  Get elapsed (wall) time in seconds
-   double t =  glutGet(GLUT_ELAPSED_TIME)/5000.0;
+   double t =  glutGet(GLUT_ELAPSED_TIME)/5000.0; //better way to do this with actual system time so we can do pre-frame drawing calculations
    zh = fmod(90*t,360.0);
    glutPostRedisplay();
    // Do 1 frame a second for now 
@@ -75,7 +69,7 @@ int main(int argc, char* argv[]){
 	//Request double buffer true color window with z buffer (if possible)
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	//Create a window 
-	glutCreateWindow("HW2: Spencer Watza"); //name homework assignment: your name
+	glutCreateWindow("HW3: Spencer Watza"); //name homework assignment: your name
 	// Register rendering function, reshaping, and key callbacks
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
@@ -86,6 +80,12 @@ int main(int argc, char* argv[]){
 	glEnable(GL_DEPTH_TEST);
 	//INITIALIZE ALL THE OBJECT MEMORIES
 	createObjects();//rendering.c
+	//Load all the textures
+	texture[0] = LoadTexBMP("fence_beam_edge.bmp");
+	texture[1] = LoadTexBMP("fence_beam_side.bmp");
+	texture[2] = LoadTexBMP("fence_post.bmp");
+	texture[3] = LoadTexBMP("fence_post_top.bmp");
+	texture[4] = LoadTexBMP("grassland.bmp");
 	// Pass control to GLUT for events
 	glutMainLoop();
 	// Return to OS

@@ -7,13 +7,13 @@
 #define GL_GLEXT_PROTOTYPES
 
 //Constants
-static double post_height = 7.0;
-static double post_width = 0.5;
-static double beam_width = 5.0;
-static double beam_height = 0.5;
-static double beam_length = 0.5; 
+const static double post_height = 7.0;
+const static double post_width = 0.5;
+const static double beam_width = 5.0;
+const static double beam_height = 0.5;
+const static double beam_length = 0.5; 
 
-static double post_spacing = 10; //units 
+const static double post_spacing = 10; //units 
 
 /*
 * Create a fence bounding a box
@@ -87,19 +87,105 @@ void createFence(int x_posts, int y_posts, double max_x, double min_x, double ma
 /*
 * Draw a fence beam
 */
-void drawBeam(){
+void drawBeam(unsigned int beamside, unsigned int beamtop){
 	glPushMatrix();
+	//Scale all the following points correctly?
 	glScaled(beam_length,beam_width,beam_height);
-	drawCube();
+	
+	glBindTexture(GL_TEXTURE_2D,beamside);
+	//Draw 2x4 Edges (LEFT)
+	glBegin(GL_QUADS);
+	glNormal3f(1,0,0);
+	glTexCoord2f(0.0,1.0); glVertex3f(+1,-1,+1);
+	glTexCoord2f(0.0,0.0); glVertex3f(+1,-1,-1);
+	glTexCoord2f(1.0,0.0); glVertex3f(+1,+1,-1);
+	glTexCoord2f(1.0,1.0); glVertex3f(+1,+1,+1);
+	glEnd();
+	//RIGHT
+	glBegin(GL_QUADS);
+	glNormal3f(-1,0,0);
+	glTexCoord2f(0.0,0.0); glVertex3f(-1,-1,-1);
+	glTexCoord2f(0.0,1.0); glVertex3f(-1,-1,+1);
+	glTexCoord2f(1.0,1.0); glVertex3f(-1,+1,+1);
+	glTexCoord2f(1.0,0.0); glVertex3f(-1,+1,-1);
+	glEnd();
+	
+	glBindTexture(GL_TEXTURE_2D, beamtop);
+	//Draw Top/Bottom, and Front/Back
+	glBegin(GL_QUADS);
+	glNormal3f(0,1,0);
+	glTexCoord2f(0.0,1.0); glVertex3f(-1,+1,+1);
+	glTexCoord2f(1.0,1.0); glVertex3f(+1,+1,+1);
+	glTexCoord2f(1.0,0.0); glVertex3f(+1,+1,-1);
+	glTexCoord2f(0.0,0.0); glVertex3f(-1,+1,-1);
+	glEnd();
+	//  Bottom
+	glBegin(GL_QUADS);
+	glNormal3f(0,-1,0);
+	glTexCoord2f(0.0,0.0); glVertex3f(-1,-1,-1);
+	glTexCoord2f(1.0,0.0); glVertex3f(+1,-1,-1);
+	glTexCoord2f(1.0,1.0); glVertex3f(+1,-1,+1);
+	glTexCoord2f(0.0,1.0); glVertex3f(-1,-1,+1);
+	glEnd();
+	//  Front
+	glBegin(GL_QUADS);
+	glNormal3f(0,0,1);
+	glTexCoord2f(0.0,0.0); glVertex3f(-1,-1, 1);
+	glTexCoord2f(1.0,0.0); glVertex3f(+1,-1, 1);
+	glTexCoord2f(1.0,1.0); glVertex3f(+1,+1, 1);
+	glTexCoord2f(0.0,1.0); glVertex3f(-1,+1, 1);
+	glEnd();
+	//  Back
+	glBegin(GL_QUADS);
+	glNormal3f(0,0,-1);
+	glTexCoord2f(1.0,0.0); glVertex3f(+1,-1,-1);
+	glTexCoord2f(0.0,0.0); glVertex3f(-1,-1,-1);
+	glTexCoord2f(0.0,1.0); glVertex3f(-1,+1,-1);
+	glTexCoord2f(1.0,1.0); glVertex3f(+1,+1,-1);
+	glEnd();
+	
 	glPopMatrix();
+	ErrCheck("Draw Fence Beam");
 }
 
 /* 
 * Draw a fence Post
 */
-void drawPost(){
+void drawPost(unsigned int postTop, unsigned int postSide){
 	glPushMatrix();
+	
 	glScaled(post_width,post_width,post_height);
-	drawCylinder();
+	
+	//Draw Top (we don't need the draw the bottom bit)
+	const int d = 5;
+	int th;
+	double h = 1; int r = 1; double* xyz;
+	
+	glBindTexture(GL_TEXTURE_2D, postTop);
+	//Draw Top
+	glBegin(GL_TRIANGLE_FAN);
+	glNormal3f(0,0,1);
+	glTexCoord2f(0.5,0.5); glVertex3f(0,0,h/2);
+	//Loop through
+	for(th = 0; th<=360;th+=d){
+		xyz = polar2ccartesianCoords(r,th);
+		glNormal3f(0,0,1);
+		glTexCoord2f(0.5+0.5*xyz[0], 0.5+0.5*xyz[1]); glVertex3f(xyz[0],xyz[1[,h/2);
+	}
+	glEnd();
+	
+	glBindTexture(GL_TEXTURE_2D, postSide);
+	//Draw Side
+	glBegin(GL_QUAD_STRIP);
+	for(th=0;th<=360;th+=d){
+		xyz = polar2ccartesianCoords(r,th);
+		glNormal3f(xyz[0],xyz[1],0);
+		glTexCoord2f(th/360,1.0); glVertex3f(xyz[0],xyz[1],h/2);
+		glTexCoord2f(th/360,0.0); glVertex3f(xyz[0],xyz[1],-h/2);
+	}
+	glEnd();
+	
 	glPopMatrix();
+	ErrCheck("Draw Fence Post");
 }
+

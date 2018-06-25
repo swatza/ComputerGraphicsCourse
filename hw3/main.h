@@ -1,6 +1,19 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+//Includes
+#include <stdio.h>
+#include <stdarg.h>
+#include <math.h>
+#include <stdlib.h>
+#include <time.h>
+#include <GL/glut.h> //linux 
+#include "keyboard.h"
+#include "rendering.h"
+#include "materials.h"
+#include "lighting.h"
+
+//Global Variables
 extern int fov;       //  Field of view (for perspective)
 extern double asp;     //  Aspect ratio
 extern double dim;   //  Size of world

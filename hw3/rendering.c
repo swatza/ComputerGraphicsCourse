@@ -7,9 +7,29 @@
 
 //Global Variables
 int number_of_cows = 2;
-//struct aircraft **airplanes;
+int number_of_lights = 2;
 struct cow_object **cows; //list of cow objects
-struct mesh_collider **mc_fence;
+struct light **lights; //list of light objects
+
+//Set material properties here
+// ---------- Grass -----------
+const static float grass_ambient[4] = {0.1,0.1,0.1,1.0};
+const static float grass_diffuse[4] = {0.9,0.9,0.9,1.0};
+const static float grass_specular[4] = {0.0,0.0,0.0,1.0};
+const static float grass_emission[4] = {0.0,0.0,0.0,1.0};
+const static int grass_shiny = 0;
+// ---------- Fence -----------
+const static float grass_ambient[4] = {0.1,0.1,0.1,1.0};
+const static float grass_diffuse[4] = {0.6,0.6,0.6,1.0};
+const static float grass_specular[4] = {0.0,0.0,0.0,1.0};
+const static float grass_emission[4] = {0.0,0.0,0.0,1.0};
+const static int grass_shiny = 0;
+// ---------- Cow -----------
+const static float grass_ambient[4] = {0.1,0.1,0.1,1.0};
+const static float grass_diffuse[4] = {0.8,0.8,0.8,1.0};
+const static float grass_specular[4] = {0.0,0.0,0.0,1.0};
+const static float grass_emission[4] = {0.0,0.0,0.0,1.0};
+const static int grass_shiny = 0;
 
 /*
 * Function called by GLUT to display/render the scene
@@ -18,14 +38,16 @@ struct mesh_collider **mc_fence;
 
 //TODO! Break this function into subparts
 void display(){
-	//double* output = malloc(size*sizeof(double));
 	//Clear the screen and Z buffer
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	//reset transformations
 	glLoadIdentity();
-	//Rotate the desired objects
+	
+	//Rotate the entire frame to make Logical sense
 	glRotated(90,1.0,0.0,0.0);
+	
+	//WHAT VIEW MODE ARE WE IN? (PERSPECTIVE vs ORTHOGONAL
 	if (mode){
 		//TODO Change this to first person look around
 		//PERSPECTIVE
@@ -60,96 +82,74 @@ void display(){
 		glRotatef(y_rotation_angle,0.0,1.0,0.0);
 		glRotatef(x_rotation_angle,0.0,0.0,1.0);
 	}
-	//Test Lighting
-	int light = 1;
-	int local = 0;
-	int ambient = 30;
-	int diffuse = 100;
-	int specular = 0;
-	float ylight = 0;
-	int distance = 5;
-	int smooth = 1;
-
-	//  Flat or smooth shading
-	glShadeModel(smooth ? GL_SMOOTH : GL_FLAT);
-	if (light)
-	{
-		//  Translate intensity to color vectors
-        float Ambient[]   = {0.01*ambient ,0.01*ambient ,0.01*ambient ,1.0};
-        float Diffuse[]   = {0.01*diffuse ,0.01*diffuse ,0.01*diffuse ,1.0};
-        float Specular[]  = {0.01*specular,0.01*specular,0.01*specular,1.0};
-
-        //Position of light
-        float Position[] = {distance*cos(deg2rad(zh)),ylight,distance*sin(deg2rad(zh)),1};
-        //draw light position as ball (still no lighting here)
-        glColor3f(1,1,1);
-        glPushMatrix();
-        glTranslated(Position[0],Position[1],Position[2]);
-        glScaled(0.1,0.1,0.1);
-        drawSphere();
-        glPopMatrix();
-        //openGL should noramlize normal vectors
-        glEnable(GL_NORMALIZE);
-        //enable lighting
-        glEnable(GL_LIGHTING);
-        //Location of viewer for specular calculations
-        glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,local);
-        //glColor sets ambient and diffuse color materials
+	
+	//Turn on lighting
+	int light = 0;
+	
+	//Flat or smooth shading
+	glShadeModel(GL_SMOOTH); //smooth baby!
+	
+	//Lighting
+	if(light){
+		//normalize normal vectors
+		glEnable(GL_NORMALIZE);		
+		//Enable 
+		glEnable(GL_LIGHTING);
+		//Location of viewer for specular calculations
+		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,local);
+		//  glColor sets ambient and diffuse color materials
         glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL);
-        //Enable light 0
-        glEnable(GL_LIGHT0);
-        // Set ambient, diffuse, and specular components and position of light
-        glLightfv(GL_LIGHT0,GL_AMBIENT, Ambient);
-        glLightfv(GL_LIGHT0,GL_DIFFUSE, Diffuse);
-        glLightfv(GL_LIGHT0,GL_SPECULAR,Specular);
-        glLightfv(GL_LIGHT0,GL_POSITION,Position);
-    }
-    else{
+		//Loop through all the lights that we have and turn those babies on! (if they are supposed to be)
+		for (int i = 0; i < number_of_lights; i++){
+			//Is it supposed to be on? else break;
+			
+			//Set it active
+			glEnable(lightEnumerations[i]);
+			//Make a ball for it (placeholder!)
+			glPushMatrix();
+			glTranslated(...);
+			glScaled(0.1,0.1,0.1);
+			//Set Material!
+			setMaterials(...); //materials.h function
+			drawSphere();
+			glPopMatrix();
+		}
+	}
+	else{
     	glDisable(GL_LIGHTING);
     }
-
-float shiny   =   1;
-	float white[] = {1,1,1,1};
-   float black[] = {0,0,0,1};
-   glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,shiny);
-   glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,white);
-   glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,black);
-    if(shape == 0){
-    	drawPlane();
-    }
-    else if(shape == 1){
-    	drawCube();
-    }
-    else if(shape == 2){
-    	drawSphere();
-    }
-    else if(shape == 3){
-    	drawPyramid();
-    }
-    else if(shape == 4){
-    	drawEllipsoid(2,1,1);
-    }
-
+	
+	//Are we using textures
+	if(ntex < 0)
+		glDisable(GL_TEXTURE_2D);
+	else{
+		//Enable textures
+		glEnable(GL_TEXTURE_2D);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // modulate mode (not replace)
+	}
+	
 	//Translate based on scale desired
 	//Draw the desired objects
 	//-----------
 	// Draw Ground Plane
 	//-----------
-	/*
+	
 	glPushMatrix();
 	glScaled(51,51,0);
-	glColor3f(0.13,0.54,0.13);
-	drawPlane();
+	setMaterials(0,grass_ambient,grass_diffuse,grass_specular,grass_emission,grass_shiny);
+	drawPlanewTexture(texture[4]);
 	glPopMatrix(); 
-	*/
+	
 	//------------
 	// Draw Fence to border ground plane
 	//------------
+	//setMaterials(0,fence_ambient,fence_diffuse,fence_specular,fence_emission,fence_shiny);
 	//createFence(11,11,50,-50,50,-50); //How big should the fence be? )
 	// -----------
 	// Draw Cows
 	// -----------
+	//setMaterials(0,cow_ambient,cow_diffuse,cow_specular,cow_emission,cow_shiny);
 	for (int i = 0; i < number_of_cows; i++){
 		//Check collisions here?
 		//renderCowObject(cows[i]);
@@ -157,15 +157,6 @@ float shiny   =   1;
 	if(axis_on){
 		//drawAxis();
 	}
-	// -----------
-	// Draw Aircraft
-	// -----------
-	/*
-	for (int i =0; i < 2; i++){
-		renderAircraftObject(airplanes[i]);
-	} */
-	//Print Angles;
-	//printAngles();
 	//Print Modes
 	printModes();
 	//Error Check
@@ -173,6 +164,7 @@ float shiny   =   1;
 	//flush and swap buffer
 	glFlush();
 	glutSwapBuffers();
+	//CHANGE THIS IF WE FIX THE COW STUFF
 	//Main new frame set back to 0
 	main_new_frame = 0;
 }
@@ -221,37 +213,15 @@ void createObjects(){
 		//create a cow object structure
 		cows[i] = my_cow_ptr;
 	}
-	//How many airplanes do we want to create
-	/*
-	double altitude[2];
-	altitude[0] = 20;
-	altitude[1] = 30;
-	double loiter_radius[2];
-	loiter_radius[0] = 70;
-	loiter_radius[1] = 40;
-	double velocity_scaler[2];
-	velocity_scaler[0] = 2;
-	velocity_scaler[1] = 1;
-
-	airplanes = (struct aircraft**)malloc(sizeof(struct aircraft*)*2);
-	for (int i =0; i < 2; i++){
-		//initialize aircraft into memory
-		struct aircraft *my_ac_ptr = (struct aircraft*)malloc(sizeof(struct aircraft));
-		//initialize the values  for aircraft
-		initializeLoiterDrone(my_ac_ptr,altitude[i],loiter_radius[i],velocity_scaler[i]);
-		airplanes[i] = my_ac_ptr;
-	} */
-
-	//Mesh Collider for Fence
-	/*
-	mc_fence = (struct mesh_collider*)malloc(sizeof(struct mesh_collider*)*4);
-	for (int i =0; i < 4; i++){
-		struct mesh_collider* mesh_ptr = (struct mesh_collider*)malloc(sizeof(struct mesh_collider));
-		struct mesh_collider thismesh = {.d=2,.w=52,.h=10}; //
-		*mesh_ptr = thismesh;
-		mc_fence[i] = mesh_ptr;
-	} */
-
+	//How many Lights do we want to create??
+	lights = (struct light**)malloc(sizeof(struct light*) * numbember_of_lights;
+	//for i in number of lights
+	for (int i =0; i<number_of_lights;i++){
+		//initialize a light object into memory
+		struct light *my_light_ptr = (struct light*)malloc(sizeof(struct light));
+		//set all parameters to default 
+		createLightObj(my_light_ptr, lightEnumerations[i]);
+	} 
 } 
 
 /*
@@ -264,6 +234,9 @@ void cleanObjects(){
 	}
 	//free(cows);
 	printf("All cows are free\n");
+	for (int i=0; i < numbember_of_lights; i++){
+		free(lights[i]);
+	}
 }
 
 /*

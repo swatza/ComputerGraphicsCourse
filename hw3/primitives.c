@@ -10,7 +10,7 @@
 
 // Check Normals
 // Draw new shapes 
-// Texture shapes
+// Texture shapes (Can we actually add texture coordinates to primitives if we don't know how the texture will actually be?)
 
 //draw a vertex in spherical coordinates (Probably just remove this)
 /*
@@ -20,29 +20,30 @@
 void drawVertex(double th,double ph){
 	//Draw Polar vertex
 	double* xyz = spherical2cartesianCoords(1,th,ph,0,0,0);
-	glNormal3f(cos(deg2rad(th))*sin(deg2rad(ph)),cos(deg2rad(th))*cos(deg2rad(ph)),sin(th));
-	glColor3f(xyz[2],sin(deg2rad(ph)) * sin(deg2rad(ph)), sin(deg2rad(th)) * sin(deg2rad(th)));
+	glNormal3(xyz[0],xyz[1],xyz[2]);
 	glVertex3f(xyz[0],xyz[1],xyz[2]);
 }
 
 /*
 * Draw a 2D Plane
 */
-void drawPlane(){
+void drawPlanewTexture(unsigned int texture){
+	glBindTexture(GL_TEXTURE_2D,texture);
+	
 	glBegin(GL_QUADS);;
 	glNormal3f(0,0,1);
-	glVertex3f(1,1,0);
+	glTexCoord2f(1.0,1.0); glVertex3f(1,1,0);
+	
+	glNormal3f(0,0,1);
+	glTexCoord2f(1.0,0.0); glVertex3f(1,-1,0);
 
 	glNormal3f(0,0,1);
-	glVertex3f(1,-1,0);
+	glTexCoord2f(0.0,0.0); glVertex3f(-1,-1,0);
 
 	glNormal3f(0,0,1);
-	glVertex3f(-1,-1,0);
-
-	glNormal3f(0,0,1);
-	glVertex3f(-1,1,0);
+	glTexCoord2f(0.0,1.0); glVertex3f(-1,1,0);
 	glEnd();
-	ErrCheck("DrawPlane");
+	ErrCheck("DrawPlane With Texture");
 }
 
 /*
@@ -101,35 +102,8 @@ void drawCube(){
 /*
 * Draw a Pyramid
 */
-void drawPyramid(){
-	glBegin(GL_POLYGON);
-	glNormal3f(0,2,2);
-	glColor3f(1.0,0.0,0); glVertex3f(-1,1,0);
-	glColor3f(1.0,0.0,0); glVertex3f(1,1,0);
-	glColor3f(1.0,0.0,0); glVertex3f(0.0,0.0,1);
-	glEnd();
-
-	glBegin(GL_POLYGON);
-	glNormal3f(0,1,1);
-	glColor3f(0.0,1.0,0); glVertex3f(-1,1,0);
-	glColor3f(0.0,1.0,0); glVertex3f(0.0,-1,0);
-	glColor3f(0.0,1.0,0); glVertex3f(0.0,0.0,1);
-	glEnd();
-
-	glBegin(GL_POLYGON);
-	glNormal3f(0,-1,-1);
-	glColor3f(0.0,0.0,1.0); glVertex3f(1,1,0);
-	glColor3f(0.0,0.0,1.0); glVertex3f(0.0,-1,0);
-	glColor3f(0.0,0.0,1.0); glVertex3f(0.0,0.0,1);
-	glEnd();
-	//Bottom
-	glBegin(GL_POLYGON);
-	glNormal3f(0,0,-1);
-	glColor3f(1.0,1.0,0); glVertex3f(-1,1,0);
-	glColor3f(1.0,1.0,0); glVertex3f(1,1,0);
-	glColor3f(1.0,1.0,0); glVertex3f(0.0,-1,0.0);
-	glEnd();
-	ErrCheck("DrawPyramid");
+void drawRectangularPyramid(){
+	//TODO
 }
 
 /*
@@ -150,6 +124,7 @@ void drawCylinder(){
 	//loop through
 	for(th=0;th<=360;th+=d){
 		xyz = polar2cartesianCoords(r,th);
+		glNormal3f(0,0,1);
 		glVertex3f(xyz[0],xyz[1],h/2);
 	}
 	glEnd();
@@ -160,10 +135,7 @@ void drawCylinder(){
 	glColor3f(0.0,1.0,0.0);
 	for (th=0;th<=360;th+=d){
 		xyz = polar2cartesianCoords(r,th);
-		//What is the normal?
-
-		//TODO DO THE NORMAL
-		glNormal3f(cos(deg2rad(th)),sin(deg2rad(th)),0); //IS THIS RIGHT?
+		glNormal3f(cos(xyz[0],xyz[1],0); //IS THIS RIGHT?
 		glVertex3f(xyz[0],xyz[1],h/2);
 		glVertex3f(xyz[0],xyz[1],-h/2);
 	}
@@ -181,11 +153,35 @@ void drawCylinder(){
 		//Draw the vertexs
 		//Get x and Y position
 		xyz = polar2cartesianCoords(r,th);
+		glNormal3f(0,0,-1);
 		glVertex3f(xyz[0],xyz[1],-h/2);
 	}
 	glEnd();
 	ErrCheck("End of Cylinder");
 }
+
+
+/*
+* Like a cylinder, except that there is no caps and there is no thickness
+*/
+void drawPipe(){
+	//Draw Middle *GREEN*
+	glBegin(GL_QUAD_STRIP);
+	glColor3f(0.0,1.0,0.0);
+	for (th=0;th<=360;th+=d){
+		xyz = polar2cartesianCoords(r,th);
+		glNormal3f(cos(xyz[0],xyz[1],0); //IS THIS RIGHT?
+		glVertex3f(xyz[0],xyz[1],h/2);
+		glVertex3f(xyz[0],xyz[1],-h/2);
+	}
+	glEnd();
+	ErrCheck("Finished Middle Portion");
+}
+
+//A pipe with a material thickness 
+void drawThickPipe(double t){
+}
+
 
 //Draw Sphere (is a specific type of an ellipsoid)
 void drawSphere(){

@@ -378,7 +378,7 @@ void initializeCowObject(struct cow_object *ptrCow, int index){
 //The animation/waiting timer function determines how to best figure out the number we are going to draw
 void determineFrameToDraw(struct cow_object *ptrCow,int flag, int steps, int number){
 	//Move the draw frame buffer one
-	ptrCow->last_frame_drawn = ptrCow->frame_to_draw;
+	//ptrCow->last_frame_drawn = ptrCow->frame_to_draw;
 	//Check Walking condition
 	if(ptrCow->move_type == 1){
 
@@ -386,7 +386,12 @@ void determineFrameToDraw(struct cow_object *ptrCow,int flag, int steps, int num
 		if(flag){
 			ptrCow->key_frame_number += 1;
 			//reset the motion if its for walking
-			if(ptrCow->key_frame_number == number_of_walking_frames){
+			if(ptrCow->key_frame_number >= number_of_walking_frames){
+				ptrCow->key_frame_number = 0;
+			}
+		}
+		else{
+			if(ptrCow->key_frame_number >= number_of_walking_frames){
 				ptrCow->key_frame_number = 0;
 			}
 		}
@@ -396,7 +401,7 @@ void determineFrameToDraw(struct cow_object *ptrCow,int flag, int steps, int num
 		int next_frame = key_frame0 + 1;
 
 		//We hit the end; start over
-		if(next_frame == number_of_walking_frames){
+		if(next_frame >= number_of_walking_frames){
 			next_frame = 0;
 		}
 
@@ -412,7 +417,12 @@ void determineFrameToDraw(struct cow_object *ptrCow,int flag, int steps, int num
 		if(flag){
 			ptrCow->key_frame_number += 1;
 			//reset the motion if its for walking
-			if(ptrCow->key_frame_number == number_of_dancing_frames){
+			if(ptrCow->key_frame_number >= number_of_dancing_frames){
+				ptrCow->key_frame_number = 0;
+			}
+		}
+		else{
+			if(ptrCow->key_frame_number >= number_of_dancing_frames){
 				ptrCow->key_frame_number = 0;
 			}
 		}
@@ -422,7 +432,7 @@ void determineFrameToDraw(struct cow_object *ptrCow,int flag, int steps, int num
 		int next_frame = key_frame0 + 1;
 
 		//We hit the end; start over
-		if(next_frame == number_of_dancing_frames){
+		if(next_frame >= number_of_dancing_frames){
 			next_frame = 0;
 		}
 
@@ -439,49 +449,66 @@ void determineFrameToDraw(struct cow_object *ptrCow,int flag, int steps, int num
 
 void AnimateBetweenKeyFrames(struct cow_object *ptrCow, int move_type, int keyframe0, int keyframe1, int number_of_steps, int step_number){
 	//struct cow_object thiscow = *ptrCow;
-	struct cow_frame out_frame; //could we just hand this the full ptr to the cow skeleton?
+	//struct cow_frame *out_frame = (struct cow_frame*)malloc(sizeof(struct cow_frame)); //could we just hand this the full ptr to the cow skeleton?
 	double* output;
-	struct cow_frame cf0; 
-	struct cow_frame cf1;
+	struct cow_frame* cf0;// =  (struct cow_frame*)malloc(sizeof(struct cow_frame)); 
+	struct cow_frame* cf1;// =  (struct cow_frame*)malloc(sizeof(struct cow_frame));
 
 	//Walking
 	if(move_type == 1){
-		cf0 = *walking_frames[keyframe0];
-		cf1 = *walking_frames[keyframe1];
+		cf0 = walking_frames[keyframe0];
+		cf1 = walking_frames[keyframe1];
 	}
 	else{
-		cf0 = *dancing_frames[keyframe0];
-		cf1 = *dancing_frames[keyframe1];
+		cf0 = dancing_frames[keyframe0];
+		cf1 = dancing_frames[keyframe1];
 	}
 	//Dancing??
 
 	//Calculate between angles
-	output = AnglesBetweenLimbs(cf0.LeftLeg, cf1.LeftLeg);
-	out_frame.LeftLeg.ULX = output[0]/number_of_steps * 1.0 * step_number + cf0.LeftLeg.ULX;
-	out_frame.LeftLeg.ULY = output[1]/number_of_steps * 1.0 * step_number + cf0.LeftLeg.ULY;
-	out_frame.LeftLeg.LLX = output[2]/number_of_steps * 1.0 * step_number + cf0.LeftLeg.LLX;
-	out_frame.LeftLeg.LLY = output[3]/number_of_steps * 1.0 * step_number + cf0.LeftLeg.LLY;
+	output = AnglesBetweenLimbs(cf0->LeftLeg, cf1->LeftLeg);
+	ptrCow->frame_to_draw.LeftLeg.ULX = output[0]/number_of_steps * 1.0 * step_number + cf0->LeftLeg.ULX;
+	ptrCow->frame_to_draw.LeftLeg.ULY = output[1]/number_of_steps * 1.0 * step_number + cf0->LeftLeg.ULY;
+	ptrCow->frame_to_draw.LeftLeg.LLX = output[2]/number_of_steps * 1.0 * step_number + cf0->LeftLeg.LLX;
+	ptrCow->frame_to_draw.LeftLeg.LLY = output[3]/number_of_steps * 1.0 * step_number + cf0->LeftLeg.LLY;
 
-	output = AnglesBetweenLimbs(cf0.RightLeg, cf1.RightLeg);
-	out_frame.RightLeg.ULX = output[0]/number_of_steps * 1.0 * step_number + cf0.RightLeg.ULX;;
-	out_frame.RightLeg.ULY = output[1]/number_of_steps * 1.0 * step_number + cf0.RightLeg.ULY;;
-	out_frame.RightLeg.LLX = output[2]/number_of_steps * 1.0 * step_number + cf0.RightLeg.LLX;;
-	out_frame.RightLeg.LLY = output[3]/number_of_steps * 1.0 * step_number + cf0.RightLeg.LLY;;
+	output = AnglesBetweenLimbs(cf0->RightLeg, cf1->RightLeg);
+	ptrCow->frame_to_draw.RightLeg.ULX = output[0]/number_of_steps * 1.0 * step_number + cf0->RightLeg.ULX;;
+	ptrCow->frame_to_draw.RightLeg.ULY = output[1]/number_of_steps * 1.0 * step_number + cf0->RightLeg.ULY;;
+	ptrCow->frame_to_draw.RightLeg.LLX = output[2]/number_of_steps * 1.0 * step_number + cf0->RightLeg.LLX;;
+	ptrCow->frame_to_draw.RightLeg.LLY = output[3]/number_of_steps * 1.0 * step_number + cf0->RightLeg.LLY;;
 
-	output = AnglesBetweenLimbs(cf0.LeftArm, cf1.LeftArm);
-	out_frame.LeftArm.ULX = output[0]/number_of_steps * 1.0 * step_number + cf0.LeftArm.ULX;;
-	out_frame.LeftArm.ULY = output[1]/number_of_steps * 1.0 * step_number + cf0.LeftArm.ULY;;
-	out_frame.LeftArm.LLX = output[2]/number_of_steps * 1.0 * step_number + cf0.LeftArm.LLX;;
-	out_frame.LeftArm.LLY = output[3]/number_of_steps * 1.0 * step_number + cf0.LeftArm.LLY;;
+	output = AnglesBetweenLimbs(cf0->LeftArm, cf1->LeftArm);
+	ptrCow->frame_to_draw.LeftArm.ULX = output[0]/number_of_steps * 1.0 * step_number + cf0->LeftArm.ULX;;
+	ptrCow->frame_to_draw.LeftArm.ULY = output[1]/number_of_steps * 1.0 * step_number + cf0->LeftArm.ULY;;
+	ptrCow->frame_to_draw.LeftArm.LLX = output[2]/number_of_steps * 1.0 * step_number + cf0->LeftArm.LLX;;
+	ptrCow->frame_to_draw.LeftArm.LLY = output[3]/number_of_steps * 1.0 * step_number + cf0->LeftArm.LLY;;
 
-	output = AnglesBetweenLimbs(cf0.RightArm, cf1.RightArm);
-	out_frame.RightArm.ULX = output[0]/number_of_steps * 1.0 * step_number + cf0.RightArm.ULX;;
-	out_frame.RightArm.ULY = output[1]/number_of_steps * 1.0 * step_number + cf0.RightArm.ULY;;
-	out_frame.RightArm.LLX = output[2]/number_of_steps * 1.0 * step_number + cf0.RightArm.LLX;;
-	out_frame.RightArm.LLY = output[3]/number_of_steps * 1.0 * step_number + cf0.RightArm.LLY;;
+	output = AnglesBetweenLimbs(cf0->RightArm, cf1->RightArm);
+	ptrCow->frame_to_draw.RightArm.ULX = output[0]/number_of_steps * 1.0 * step_number + cf0->RightArm.ULX;;
+	ptrCow->frame_to_draw.RightArm.ULY = output[1]/number_of_steps * 1.0 * step_number + cf0->RightArm.ULY;;
+	ptrCow->frame_to_draw.RightArm.LLX = output[2]/number_of_steps * 1.0 * step_number + cf0->RightArm.LLX;;
+	ptrCow->frame_to_draw.RightArm.LLY = output[3]/number_of_steps * 1.0 * step_number + cf0->RightArm.LLY;;
 	//Finished inbetween frame calculation
 	//Hand over the next frame
-	ptrCow->frame_to_draw = out_frame;
+	//memcpy(&ptrCow->frame_to_draw, out_frame, sizeof(cow_frame));
+	//free(cf0);
+	//freeCowFramePtr(cf1);
+	//freeCowFramePtr(out_frame);
+	//ptrCow->frame_to_draw = out_frame;
+}
+
+void freeCowFramePtr(struct cow_frame* ptr){
+	struct cow_limb_angles* sub_ptr;
+	sub_ptr = &ptr->LeftLeg;
+	free(sub_ptr);
+	sub_ptr = &ptr->RightLeg;
+	free(sub_ptr);
+	sub_ptr = &ptr->LeftArm;
+	free(sub_ptr);
+	sub_ptr = &ptr->RightArm;
+	free(sub_ptr);
+	//free(ptr);
 }
 
 double* AnglesBetweenLimbs(struct cow_limb_angles L1, struct cow_limb_angles L2){

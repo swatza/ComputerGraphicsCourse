@@ -20,13 +20,30 @@ double* haybale_x;
 double* haybale_z;
 double* haybale_yaw;
 
+static float light_ambient[] = {0.0,0.0,0.0,1.0}; //yellowish-white light?
+static float light_diffuse[] = {0.8,0.8,0.8,1.0}; //default
+static float light_specular[] = {0.1,0.1,0.1,1.0}; //default
+
+static float flashlight_ambient[] = {0,0,0,1.0};
+static float flashlight_diffuse[] = {1,1,1,1};
+static float flashlight_specular[] = {0.5,0.5,0.5,1.0};
+
+float redlight_diffuse[] = {1.0,0,0,1.0};
+float bluelight_diffuse[] = {0,0,1.0,1};
+float purplelight_diffuse[] = {0.0,1,0.0,1.0};
+
+float light_position2[] = {15,15,15,1};
+float light_position3[] = {-15,15,15,1};
+float light_position4[] = {0,15,-15,1};
+
+float Direction2[] = {-1,-1,-1};
+float Direction3[] = {1,-1,-1};
+float Direction4[] = {0,-1,1};
+
 //Global variables for animation
 int sub_frame_number = 0;
 int key_frame_spacing = 5;
-
-double PH = 0;
-double TH = 0;
-double TH_Step = 1;
+int frame_reset_flag = 0;
 
 
 void displayScene1(){
@@ -48,13 +65,6 @@ void displayScene1(){
 
 	//Lighting -> Sky
 	//Copy Code from previous assignment
-	float light_ambient[] = {0.0,0.0,0.0,1.0}; //yellowish-white light?
-	float light_diffuse[] = {0.8,0.8,0.8,1.0}; //default
-	float light_specular[] = {0.1,0.1,0.1,1.0}; //default
-
-	float flashlight_ambient[] = {0,0,0,1.0};
-	float flashlight_diffuse[] = {1,1,1,1};
-	float flashlight_specular[] = {0.5,0.5,0.5,1.0};
 	//normalize normal vectors
 	glEnable(GL_NORMALIZE);		
 	//Enable 
@@ -92,18 +102,6 @@ void displayScene1(){
 		glDisable(GL_LIGHT1);
 
 	if(dance_party_toggle){
-		float redlight_diffuse[] = {1.0,0,0,1.0};
-		float bluelight_diffuse[] = {0,0,1.0,1};
-		float purplelight_diffuse[] = {0.0,1,0.0,1.0};
-
-		float light_position2[] = {15,15,15,1};
-		float light_position3[] = {-15,15,15,1};
-		float light_position4[] = {0,15,-15,1};
-
-		float Direction2[] = {-1,-1,-1};
-		float Direction3[] = {1,-1,-1};
-		float Direction4[] = {0,-1,1};
-
 		//Enable
 		glEnable(GL_LIGHT2);
 		glEnable(GL_LIGHT3);
@@ -230,6 +228,7 @@ void displayScene1(){
 	}
 
 	//Draw all the cows
+	//printf("Doing scene drawing\n");
 	for (int i = 0; i < number_of_cows_scene1; i ++){
 		glPushMatrix();
 		if(scene_1_cows[i]->isStanding){
@@ -279,14 +278,15 @@ void calculateScene1Animations(){
 	//increment sub frame number
 	int key_frame_shift_flag = 0;
 	sub_frame_number += 1;
-	if (sub_frame_number == key_frame_spacing){
-		//restart counter
-		sub_frame_number = 0;
-		//incremet keyframe
-		key_frame_shift_flag = 1;
-	}
+	//printf("Doing scene calculations\n");
 	//Determine which skeleton to draw
 	for(int i = 0; i < number_of_cows_scene1; i++){
+		if (sub_frame_number == key_frame_spacing){
+			//restart counter
+			sub_frame_number = 0;
+			//incremet keyframe
+			key_frame_shift_flag = 1;
+		}
 		//Do frame calculations
 		determineFrameToDraw(scene_1_cows[i],key_frame_shift_flag,key_frame_spacing,sub_frame_number);
 		//Do skeleton calculations

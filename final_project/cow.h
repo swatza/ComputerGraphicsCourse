@@ -40,6 +40,7 @@ double* AnglesBetweenLimbs(struct cow_limb_angles L1, struct cow_limb_angles L2)
 void createWalkingFrames();
 void createStandingFrame();
 void createDancingFrame();
+void freeCowFramePtr(struct cow_frame* ptr);
 //void renderCowObject(struct cow_object* my_cow_ptr, struct cow_object** all_cows);
 
 //Struct Implementations

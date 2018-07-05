@@ -51,49 +51,10 @@ static struct cow_frame frame8 = {.A1 = 0,.A2=-90};
 //90,180 F8 - 90,90 -> either to 1 or 0
 
 /*
-* Initial function to test drawing a cow and testing some of the memory tools
-*/
-void drawCowTest(int angle1,int angle2){
-	angle1 = angle1 - 90;
-	angle2 = angle2 - 90;
-	//Calculate the skeleton parts
-	cow_leg_skeleton *my_cow_leg = (struct cow_leg_skeleton*)malloc(sizeof(struct cow_leg_skeleton)); //OPTIMIZATION ISSUE IS THIS
-	calculateCowLegSkeleton(angle1,angle2,my_cow_leg);
-
-	//Using the skeleton information, draw the cow parts
-	drawCowTorso();
-	glPushMatrix();
-	glTranslated(4.5,0,-0.4);
-	drawCowHead();
-	glPopMatrix();
-
-	//Now shift the cow leg
-	glPushMatrix();
-	glTranslated(-2.5,-1,1); //Rear Leg Coordinate?
-	drawCowLeg(*my_cow_leg);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslated(-2.5,1,1); //Rear Leg Coordinate?
-	drawCowLeg(*my_cow_leg);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslated(2.5,-1,1); //Front Leg 
-	drawCowLeg(*my_cow_leg);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslated(2.5,1,1); //Front Leg
-	drawCowLeg(*my_cow_leg);
-	glPopMatrix();
-}
-
-/*
 * Function called with an object to be rendered. Also calculates the location/skeleton of the object
 * IN FUTURE WORK MOVE SKELETON/MOVEMENT CALCULATION OUTSIDE OF DRAW CALLS (Do Pre-Rendering Work elsewhere)
 */
-void renderCowObject(struct cow_object* my_cow_ptr){
+void renderCowObject(struct cow_object* my_cow_ptr, unsigned int cow_body_text, unsigned int cow_head_text){
 	struct cow_object my_cow = *my_cow_ptr; //hand off the cow object
 	struct cow_skeleton my_cow_skeleton = my_cow.skeleton; //hand off the cow skeleton 
 	//Determine movement of cow
@@ -152,7 +113,7 @@ void renderCowObject(struct cow_object* my_cow_ptr){
 		my_cow.new_frame = 0;
 	}
 	//Render the cow
-	drawCow(my_cow_skeleton);
+	drawCow(my_cow_skeleton, cow_body_text, cow_head_text);
 	my_cow.skeleton = my_cow_skeleton;
 	//Hand back the cow object
 	*my_cow_ptr = my_cow;
@@ -165,37 +126,41 @@ void renderCowObject(struct cow_object* my_cow_ptr){
 /*
 * Function to draw all parts of a cow
 */
-void drawCow(struct cow_skeleton my_cow_skeleton){
+void drawCow(struct cow_skeleton my_cow_skeleton, unsigned int cow_body_text, unsigned int cow_head_text){
 	glPushMatrix();
 	glTranslated(my_cow_skeleton.body_point.x,my_cow_skeleton.body_point.y,my_cow_skeleton.body_point.z);
 	glRotated(my_cow_skeleton.body_orientation.z, 0.0,0.0,1.0);
 	//glRotatef(my_cow_skeleton.body_orientation.x,my_cow_skeleton.body_orientation.y,my_cow_skeleton.body_orientation.z);
-	drawCowTorso();
+	drawCowTorso(cow_body_text); 
 	//Draw the head
 	glPushMatrix();
 	glTranslated(4.5,0,-0.4);
-	drawCowHead();
+	//glRotatef(90,0,0,-1.0);
+	//glRotatef(90,1,0,0);
+	drawCowHead(cow_head_text);
 	glPopMatrix();
+
+	//glDisable(GL_TEXTURE_2D);
 
 	//Now shift the cow leg
 	glPushMatrix();
 	glTranslated(-2.5,-1,1.0); //Rear Leg Coordinate?
-	drawCowLeg(my_cow_skeleton.LeftHindLeg);
+	drawCowLeg(my_cow_skeleton.LeftHindLeg, cow_body_text);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(-2.5,1,1.0); //Rear Leg Coordinate?
-	drawCowLeg(my_cow_skeleton.RightHindLeg);
+	drawCowLeg(my_cow_skeleton.RightHindLeg, cow_body_text);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(2.5,-1,1.0); //Front Leg 
-	drawCowLeg(my_cow_skeleton.LeftFrontLeg);
+	drawCowLeg(my_cow_skeleton.LeftFrontLeg, cow_body_text);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslated(2.5,1,1.0); //Front Leg
-	drawCowLeg(my_cow_skeleton.RightFrontLeg);
+	drawCowLeg(my_cow_skeleton.RightFrontLeg, cow_body_text);
 	glPopMatrix();
 
 	glPopMatrix();
@@ -204,44 +169,46 @@ void drawCow(struct cow_skeleton my_cow_skeleton){
 /*
 * Draw a cow torso
 */
-void drawCowTorso(){
-	drawEllipsoid(body_length,body_width,body_height);
+void drawCowTorso(unsigned int body_texture){
+	drawEllipsoidwTexture(body_length,body_width,body_height,body_texture,0);
 }
 
 /*
 * Draw a cow's leg based on skeleton data of the join locations
 */
-void drawCowLeg(struct cow_leg_skeleton leg){
+void drawCowLeg(struct cow_leg_skeleton leg, unsigned int body_texture){
 	//Using the angles and positions gathered from the skeleton leg
 	//printf("Upper Leg Position %f,0,%f\n",leg.upper_leg_pos.x, leg.upper_leg_pos.z);
 	//printf("Lower Leg Position %f,0,%f\n",leg.lower_leg_pos.x, leg.lower_leg_pos.z);
 	//HIP
+	glColor3f(1.0,1.0,1.0);
 	glPushMatrix();
 	glScaled(upper_leg_width,upper_leg_width,upper_leg_width);
-	drawSphere();
+	drawSpherewTexture(body_texture);
 	glPopMatrix();
 	//UPPER LEG
 	glPushMatrix(); //Save the transformations
 	glTranslated(leg.upper_leg_pos.x,leg.upper_leg_pos.y, leg.upper_leg_pos.z);
 	glRotatef(leg.upper_leg_angle,0.0,1.0,0.0);
 	glScaled(upper_leg_width, upper_leg_width, upper_leg_length);
-	drawCylinder();
+	drawPipewTexture(body_texture);
 	glPopMatrix(); //Undo the transformations
 	//KNEE
 	glPushMatrix(); //Do i Need to do a glPush?
 	glTranslated(leg.knee_pos.x, leg.knee_pos.y, leg.knee_pos.z);
 	glScaled(upper_leg_width,upper_leg_width,upper_leg_width);
-	drawSphere();
+	drawSpherewTexture(body_texture);
 	glPopMatrix();
 	//LOWER LEG
 	glPushMatrix();
 	glTranslated(leg.lower_leg_pos.x, leg.lower_leg_pos.y, leg.lower_leg_pos.z);
 	glRotatef(leg.lower_leg_angle,0.0,1.0,0.0);
 	glScaled(lower_leg_width, lower_leg_width, lower_leg_length);
-	drawCylinder();
+	drawPipewTexture(body_texture);
 	glPopMatrix();
 	//ANKLE TODO
 	glPushMatrix();
+	glColor3f(0.0,0.0,0.0);
 	glTranslated(leg.ankle_pos.x, leg.ankle_pos.y, leg.ankle_pos.z);
 	glScaled(lower_leg_width,lower_leg_width,ankle_height);
 	drawCylinder();
@@ -252,8 +219,8 @@ void drawCowLeg(struct cow_leg_skeleton leg){
 /*
 * Draw the cow head 
 */
-void drawCowHead(){
-	drawEllipsoid(head_length,head_width,head_height);
+void drawCowHead(unsigned int head_texture){
+	drawEllipsoidwTexture(head_length,head_width,head_height,head_texture,1);
 	glPushMatrix();
 	glTranslated(-4.5,0,+0.4);
 	drawHorns();

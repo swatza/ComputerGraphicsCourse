@@ -12,8 +12,10 @@ extern int z_rotation_angle;
 //extern int side; 
 extern int view_mode;
 extern int axis_on;
-extern int shape;
+extern int sceneflag;
 extern int textureFlag;
+extern int lightingOn;
+extern int flashlightFlag;
 
 extern double camera_x;
 extern double camera_y;

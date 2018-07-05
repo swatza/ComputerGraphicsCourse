@@ -9,13 +9,14 @@
 #include <GL/glut.h> //linux 
 
 //Prototypes
-void drawVertex(double th,double ph);
-void drawPlanewTexture(unsigned int texture);
+void drawVertex(double th,double ph, float s, int mode);
+void drawPlanewTexture(unsigned int text);
 void drawCube();
 void drawPyramid();
 void drawCylinder();
-void drawSphere();
-void drawEllipsoid(double a, double b, double c);
+void drawPipewTexture(int unsigned text);
+void drawSpherewTexture(unsigned int text);
+void drawEllipsoidwTexture(double a, double b, double c,unsigned int text, int mode);
 
 
 #endif

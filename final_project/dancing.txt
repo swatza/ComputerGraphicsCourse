@@ -1,0 +1,30 @@
+What animation frames should we look for? Tonight decide on a dance.
+Rewrite / build the project from source files 
+
+Objects to build/manage
+Well container - Extra (Bowl structure / Cylinder) 
+Pump windmill - Extra 
+	-Beams (up-down)
+	-Strut Planks (need to make a new object)
+	-Struct (cylinders)
+	-Fan blade (Curved plane)
+	-Fan Cone (Cone)
+	-Fan Stabilizer (thin plane)
+Fence -> Already made
+Skybox -> TBD
+Hay bail - Cube with fancy texture
+Horse - Extra
+Cow - Update my model a bit
+
+Change the way we calculate the next skeleton: run at 30 fps for drawing
+In idle:
+increment timer
+if it is time to draw
+  reset flag for frame calcs
+  draw stuff
+else if need to do next frame calcs
+  do calculations
+  set flag for frame calcs
+else
+  do nothing
+

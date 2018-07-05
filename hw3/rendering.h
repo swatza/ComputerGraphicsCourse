@@ -25,6 +25,7 @@ int number_of_cows;
 void display(); 
 void drawAxis();
 //void printAngles();
+void printSettings();
 void printModes();
 void printCameraPosition();
 void Print(const char* format, ...);

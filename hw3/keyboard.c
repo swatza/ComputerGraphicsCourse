@@ -17,12 +17,12 @@ int z_rotation_angle = 10;
 
 int view_mode = 0; //0 = overhead/god mode, 1st Person
 int axis_on = 1;
-//Which shape to draw
-int shape = 0;
-int textureFlag = 1;
 
-//Add lighting variable here
+int sceneflag = 0; //daylight - night-time
+// texture and lighting flag to turn on
+int textureFlag = 1;
 int lightingOn = 1;
+int flashlightFlag = 0;
 
 //1st Person Camera Variables
 double camera_x = 0;
@@ -78,7 +78,7 @@ void special(int key, int x, int y){
 	}
 	//Scene Change
 	else if (key == GLUT_KEY_HOME){
-		
+		sceneflag = 1 - sceneflag;
 	}
 	//Keep within 360
 	x_rotation_angle %= 360;
@@ -143,9 +143,8 @@ void key(unsigned char ch, int x, int y){
 	else if(ch == 't'){
 		textureFlag = 1 - textureFlag;
 	}
-	//Toggle shape
-	else if(ch == 'p'){
-		shape++;
+	else if(ch == 'f'){
+		flashlightFlag = 1 - flashlightFlag;
 	}
 	//Dealing with FOV
 	else if (ch == '-' && ch>1)
@@ -159,10 +158,6 @@ void key(unsigned char ch, int x, int y){
 		if(ch == '0'){
 			view_mode = 1 - view_mode;
 		}
-	}
-	//Constraing Shapes
-	if(shape > 4){
-		shape = 0;
 	}
 	Projection();
 	//Tell GLUT it is necessary to redisplay the scene

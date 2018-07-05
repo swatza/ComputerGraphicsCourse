@@ -15,7 +15,7 @@ double last_time_frame = 0;
 int main_new_frame = 0;
 int zh = 90;  					// Light azimuth
 
-unsigned int texture[5]; 		// Texture Names
+unsigned int texture[7]; 		// Texture Names
 
 /*
  * This function is called by GLUT when the window is resized
@@ -41,7 +41,7 @@ void idle()
 {
    //  Get elapsed (wall) time in seconds
    double t =  glutGet(GLUT_ELAPSED_TIME)/5000.0; //better way to do this with actual system time so we can do pre-frame drawing calculations
-   //zh = fmod(90*t,360.0);
+   zh = fmod(90*t,360.0);
    glutPostRedisplay();
    // Do 1 frame a second for now 
    /*
@@ -62,6 +62,7 @@ void idle()
 * Original by Willem A. (Vlakkies) Schreuder
 */
 int main(int argc, char* argv[]){
+	printf("Starting!!\n");
 	srand(time(0));
 	//Initialize GLUT
 	glutInit(&argc,argv);
@@ -79,13 +80,18 @@ int main(int argc, char* argv[]){
 	//Enable Z-buffer depth test
 	glEnable(GL_DEPTH_TEST);
 	//INITIALIZE ALL THE OBJECT MEMORIES
+	printf("About to create objects\n");
 	createObjects();//rendering.c
+	printf("Finished creating objects\n");
 	//Load all the textures
 	texture[0] = LoadTexBMP("fence_beam_edge.bmp");
 	texture[1] = LoadTexBMP("fence_beam_side.bmp");
 	texture[2] = LoadTexBMP("fence_post.bmp");
 	texture[3] = LoadTexBMP("fence_post_top.bmp");
 	texture[4] = LoadTexBMP("grassland.bmp");
+	texture[5] = LoadTexBMP("cow_white_black.bmp");
+	texture[6] = LoadTexBMP("cow_face_black.bmp");
+	printf("Finished loading in textures\n");
 	// Pass control to GLUT for events
 	glutMainLoop();
 	// Return to OS

@@ -20,9 +20,14 @@ const int d = 5;
 * Function to makea 3D vertex with color both based on the angles so it has some kind of appearance
 * Original by Willem A. (Vlakkies) Schreuder
 */
-void drawVertex(double th,double ph){
+void drawVertex(double th,double ph, float s, int mode){
 	//Draw Polar vertex
 	double* xyz = spherical2cartesianCoords(1,th,ph,0,0,0);
+	if(mode){
+		glTexCoord2f(s,th/360.0);
+	}else{
+		glTexCoord2f(th/360.0,s);
+	}
 	glNormal3f(xyz[0],xyz[1],xyz[2]);
 	glVertex3f(xyz[0],xyz[1],xyz[2]);
 }
@@ -30,21 +35,22 @@ void drawVertex(double th,double ph){
 /*
 * Draw a 2D Plane
 */
-void drawPlanewTexture(unsigned int texture){
-	glBindTexture(GL_TEXTURE_2D,texture);
+void drawPlanewTexture(unsigned int text){
+	glBindTexture(GL_TEXTURE_2D,text);
 	
 	glBegin(GL_QUADS);
-	glNormal3f(0,0,1);
-	glTexCoord2f(1.0,1.0); glVertex3f(1,1,0);
-	
-	glNormal3f(0,0,1);
-	glTexCoord2f(1.0,0.0); glVertex3f(1,-1,0);
-
 	glNormal3f(0,0,1);
 	glTexCoord2f(0.0,0.0); glVertex3f(-1,-1,0);
 
 	glNormal3f(0,0,1);
 	glTexCoord2f(0.0,1.0); glVertex3f(-1,1,0);
+
+	glNormal3f(0,0,1);
+	glTexCoord2f(1.0,1.0); glVertex3f(1,1,0);
+
+	glNormal3f(0,0,1);
+	glTexCoord2f(1.0,0.0); glVertex3f(1,-1,0);
+
 	glEnd();
 	ErrCheck("DrawPlane With Texture");
 }
@@ -166,60 +172,50 @@ void drawCylinder(){
 /*
 * Like a cylinder, except that there is no caps and there is no thickness
 */
-void drawPipe(){
+void drawPipewTexture(int unsigned text){
 	double r = 1;
 	double h = 1;
 	double th;
 	double* xyz;
-	//Draw Middle *GREEN*
+	glBindTexture(GL_TEXTURE_2D,text);
+
 	glBegin(GL_QUAD_STRIP);
-	glColor3f(0.0,1.0,0.0);
 	for (th=0;th<=360;th+=d){
 		xyz = polar2cartesianCoords(r,th);
-		glNormal3f(xyz[0],xyz[1],0); //IS THIS RIGHT?
-		glVertex3f(xyz[0],xyz[1],h/2);
-		glVertex3f(xyz[0],xyz[1],-h/2);
+		glNormal3f(xyz[0],xyz[1],0);
+		glTexCoord2f(th/360.0,0.0); glVertex3f(xyz[0],xyz[1],h/2);
+		glTexCoord2f(th/360.0,1.0); glVertex3f(xyz[0],xyz[1],-h/2);
 	}
 	glEnd();
 	ErrCheck("Finished Middle Portion");
 }
 
-//A pipe with a material thickness 
-void drawThickPipe(double t){
-}
-
-
 //Draw Sphere (is a specific type of an ellipsoid)
-void drawSphere(){
-	drawEllipsoid(1,1,1);
+void drawSpherewTexture(unsigned int text){
+	drawEllipsoidwTexture(1,1,1,text,0);
 }
 
 /*
 * Draw Ellipsoid
 * Original by Willem A. (Vlakkies) Schreuder
 */
-void drawEllipsoid(double a, double b, double c){
+void drawEllipsoidwTexture(double a, double b, double c, unsigned int text, int textmode){
 	int th,ph;
 	glPushMatrix();
 	glScaled(a,b,c);
+	glBindTexture(GL_TEXTURE_2D,text);
 	for (ph=-90;ph<90;ph+=d)
 	{
 		glBegin(GL_QUAD_STRIP);
 		for (th=0;th<=360;th+=d)
 		{
-			drawVertex(th,ph);
-			drawVertex(th,ph+d);
+			float s = 0.5 + ph/180.0;
+			float s2 = 0.5 + (ph+d)/180.0;
+			drawVertex(th,ph,s,textmode);
+			drawVertex(th,ph+d,s2,textmode);
 		}
 		glEnd();
 	}
 	ErrCheck("drawEllipsoid");
 	glPopMatrix();
-}
-
-/*
-* Draw a Torus
-* TODO!
-*/ 
-void drawTorus(){
-
 }

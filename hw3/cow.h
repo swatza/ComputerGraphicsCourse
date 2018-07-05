@@ -19,12 +19,11 @@ typedef struct cow_object cow_object;
 typedef struct cow_frame cow_frame;
 
 //Prototypes
-void drawCowTest(int angle1, int angle2);
-void renderCowObject(struct cow_object* my_cow_ptr);
-void drawCow(struct cow_skeleton my_cow_skeleton);
-void drawCowLeg(struct cow_leg_skeleton leg);
-void drawCowHead();
-void drawCowTorso();
+void renderCowObject(struct cow_object* my_cow_ptr, unsigned int cow_body_text, unsigned int cow_head_text);
+void drawCow(struct cow_skeleton my_cow_skeleton,unsigned int cow_body_text, unsigned int cow_head_text);
+void drawCowLeg(struct cow_leg_skeleton leg,unsigned int body_texture);
+void drawCowHead(unsigned int cow_head_text);
+void drawCowTorso(unsigned int body_texture);
 void drawHorns();
 void drawEars();
 void calculateCowSkeleton(int frl,int fll, int brl, int bll, struct cow_skeleton *cow_skeleton_ptr);

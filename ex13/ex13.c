@@ -143,7 +143,7 @@ static void ball(double x,double y,double z,double r)
  *     at (x,y,z)
  *     radius (r)
  */
-{
+static void ball(double x, double y, double r, double r){
    int th,ph;
    float yellow[] = {1.0,1.0,0.0,1.0};
    float Emission[]  = {0.0,0.0,0.01*emission,1.0};

@@ -7,29 +7,33 @@
 
 //Global Variables
 int number_of_cows = 2;
-int number_of_lights = 2;
+int number_of_lights = 1;
 struct cow_object **cows; //list of cow objects
 struct light **lights; //list of light objects
 
 //Set material properties here
 // ---------- Grass -----------
-const static float grass_ambient[4] = {0.1,0.1,0.1,1.0};
-const static float grass_diffuse[4] = {0.9,0.9,0.9,1.0};
-const static float grass_specular[4] = {0.0,0.0,0.0,1.0};
-const static float grass_emission[4] = {0.0,0.0,0.0,1.0};
-const static int grass_shiny = 0;
+static float grass_ambient[4] = {0.0,0.0,0.0,1.0};
+static float grass_diffuse[4] = {0.02,0.02,0.02,1.0};
+static float grass_specular[4] = {0.03,0.03,0.03,1.0};
+static float grass_emission[4] = {0.1,0.1,0.1,1.0};
+static int grass_shiny = 1;
 // ---------- Fence -----------
-const static float fence_ambient[4] = {0.1,0.1,0.1,1.0};
-const static float fence_diffuse[4] = {0.6,0.6,0.6,1.0};
-const static float fence_specular[4] = {0.0,0.0,0.0,1.0};
-const static float fence_emission[4] = {0.0,0.0,0.0,1.0};
-const static int fence_shiny = 0;
+static float fence_ambient[4] = {0.01,0.01,0.01,1.0};
+static float fence_diffuse[4] = {0.01,0.01,0.01,1.0};
+static float fence_specular[4] = {0.01,0.01,0.1,01.0};
+static float fence_emission[4] = {0.0,0.0,0.0,1.0};
+static int fence_shiny = 0;
 // ---------- Cow -----------
-const static float cow_ambient[4] = {0.1,0.1,0.1,1.0};
-const static float cow_diffuse[4] = {0.8,0.8,0.8,1.0};
-const static float cow_specular[4] = {0.0,0.0,0.0,1.0};
-const static float cow_emission[4] = {0.0,0.0,0.0,1.0};
-const static int cow_shiny = 0;
+static float cow_ambient[4] = {0.1,0.1,0.1,1.0};
+static float cow_diffuse[4] = {0.3,0.3,0.3,1.0}; 
+static float cow_specular[4] = {0.0,0.0,0.0,1.0};
+static float cow_emission[4] = {0.0,0.0,0.0,1.0};
+static int cow_shiny = 0;
+//-----------Light ----------
+float light_ambient[] = {0.3,0.3,0.1,1.0};
+float light_diffuse[] = {0.5,0.5,0.5,1.0};
+float light_specular[] ={0.0,0.0,0.0,0.0};
 
 
 /*
@@ -57,8 +61,8 @@ void display(){
 			if(z_rotation_angle > 88){
 				z_rotation_angle = 88; //limiting Z rotation
 			}
-			if(z_rotation_angle < 2){
-				z_rotation_angle = 2;
+			if(z_rotation_angle < -180){
+				z_rotation_angle = 0;
 			}
 			double* xyz = spherical2cartesianCoords(3*dim,z_rotation_angle,-x_rotation_angle,0,0,0);
 			double Ex = xyz[0];
@@ -83,15 +87,13 @@ void display(){
 		glRotatef(y_rotation_angle,0.0,1.0,0.0);
 		glRotatef(x_rotation_angle,0.0,0.0,1.0);
 	}
-	
-	//Turn on lighting
-	int light = 0;
+	//printf("Finished Camera Part\n");
 	
 	//Flat or smooth shading
 	glShadeModel(GL_SMOOTH); //smooth baby!
 	
 	//Lighting
-	if(light){
+	if(lightingOn){
 		//normalize normal vectors
 		glEnable(GL_NORMALIZE);		
 		//Enable 
@@ -101,27 +103,67 @@ void display(){
 		//  glColor sets ambient and diffuse color materials
         glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL);
+		//printf("About to start loop with lights\n");
+		double distance = 80;
+		glEnable(GL_LIGHT0);
+		if(sceneflag){
+			float night_time_ambient[] = {0.01,0.01,0.01,1.0};
+			glLightfv(GL_LIGHT0,GL_AMBIENT ,night_time_ambient);
+	        glLightfv(GL_LIGHT0,GL_DIFFUSE ,light_diffuse);
+	        glLightfv(GL_LIGHT0,GL_SPECULAR,light_specular);
+	        float position[] = {distance*cos(deg2rad(zh)),distance*sin(deg2rad(zh)),-distance/2,1};
+	        glLightfv(GL_LIGHT0,GL_POSITION,position);
+
+		}
+		else{
+			static float dayLight[] = {0.5,0.5,0.5,1.0};
+			static float dayLight_diffuse[] = {0.5,0.5,0.5,1.0};
+	        //  Set ambient, diffuse, specular components and position of light 0
+	        glLightfv(GL_LIGHT0,GL_AMBIENT ,light_ambient);
+	        glLightfv(GL_LIGHT0,GL_DIFFUSE ,light_diffuse);
+	        glLightfv(GL_LIGHT0,GL_SPECULAR,light_specular);
+	        float position[] = {distance*cos(deg2rad(zh)),distance*sin(deg2rad(zh)),-distance/2,1};
+	        glLightfv(GL_LIGHT0,GL_POSITION,position);
+
+	    }
+	    float yellow[] = {1.0,1.0,0.0,1.0};
+		glPushMatrix();
+		setMaterials(0,default_ambient,default_diffuse,yellow,default_emission,2);
+		glTranslated(distance*cos(deg2rad(zh)),distance*sin(deg2rad(zh)),-distance/2);
+		glScaled(0.5,0.5,0.5);
+		glColor3f(1.0,1.0,1.0);
+		drawSpherewTexture(texture[0]);
+		glPopMatrix();
+
+		/*
 		//Loop through all the lights that we have and turn those babies on! (if they are supposed to be)
 		for (int i = 0; i < number_of_lights; i++){
 			//Is it supposed to be on? else break;
-			
 			//Set it active
 			glEnable(lightEnumerations[i]);
-			//Make a ball for it (placeholder!)
-			glPushMatrix();
-			//Put it in the correct spot 
-			glTranslated(0,0,30);
-			glScaled(0.1,0.1,0.1);
-			//Draw representative sphere
-			drawSphere();
-			glPopMatrix();
+			//printf("Enabled Light\n");
 			//Set the lighting on
-			performLighting(lights[i]);
-		}
+			double ylight = 5;
+			double distance = 80;
+			float yellow[] = {1.0,1.0,0.0,1.0};
+			//moveLightPosition(lights[i],distance*cos(deg2rad(zh)),ylight,-distance*sin(deg2rad(zh)));
+			moveLightPosition(lights[i],distance*cos(deg2rad(zh)),distance*sin(deg2rad(zh)),-distance/2);
+			glPushMatrix();
+			setMaterials(0,default_ambient,default_diffuse,yellow,default_emission,2);
+			glTranslated(distance*cos(deg2rad(zh)),distance*sin(deg2rad(zh)),-distance/2);
+			glScaled(0.5,0.5,0.5);
+			glColor3f(1.0,1.0,1.0);
+			drawSpherewTexture(texture[0]);
+			glPopMatrix();
+			//printf("About to start Lighting\n");
+			//performLighting(lights[i]);
+			//printf("Finished Set Lighting\n");
+		} */
 	}
 	else{
     	glDisable(GL_LIGHTING);
     }
+    //printf("Finished Lighting!\n");
 	
 	//Are we using textures
 	if(textureFlag == 0)
@@ -131,35 +173,43 @@ void display(){
 		glEnable(GL_TEXTURE_2D);
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // modulate mode (not replace)
 	}
+	//printf("Finished Textures!\n");
 	
 	//Translate based on scale desired
 	//Draw the desired objects
 	//-----------
 	// Draw Ground Plane
 	//-----------
-	
+
 	glPushMatrix();
 	glScaled(51,51,0);
 	setMaterials(0,grass_ambient,grass_diffuse,grass_specular,grass_emission,grass_shiny);
+	//printf("Finished setting materials\n");
+	glColor3f(1.0,1.0,1.0);
 	drawPlanewTexture(texture[4]);
+	//printf("Finished drawing plane\n");
 	glPopMatrix(); 
 	
 	//------------
 	// Draw Fence to border ground plane
 	//------------
-	//setMaterials(0,fence_ambient,fence_diffuse,fence_specular,fence_emission,fence_shiny);
-	//createFence(11,11,50,-50,50,-50); //How big should the fence be? )
+	setMaterials(0,fence_ambient,fence_diffuse,fence_specular,fence_emission,fence_shiny);
+	createFence(11,11,50,-50,50,-50,texture[2],texture[3],texture[0],texture[1]);
 	// -----------
 	// Draw Cows
 	// -----------
-	//setMaterials(0,cow_ambient,cow_diffuse,cow_specular,cow_emission,cow_shiny);
+	setMaterials(0,cow_ambient,cow_diffuse,cow_specular,cow_emission,cow_shiny);
 	for (int i = 0; i < number_of_cows; i++){
 		//Check collisions here?
-		//renderCowObject(cows[i]);
+		glColor3f(1.0,1.0,1.0);
+		renderCowObject(cows[i], texture[5],texture[6]);
 	}
+	glDisable(GL_TEXTURE_2D);
 	if(axis_on){
-		//drawAxis();
+		drawAxis();
+		glColor3f(1.0,1.0,1.0);
 	}
+	printSettings();
 	//Print Modes
 	printModes();
 	//Error Check
@@ -224,6 +274,7 @@ void createObjects(){
 		struct light *my_light_ptr = (struct light*)malloc(sizeof(struct light));
 		//set all parameters to default 
 		createLightObj(my_light_ptr, lightEnumerations[i]);
+		lights[i] = my_light_ptr;
 	} 
 } 
 
@@ -239,6 +290,43 @@ void cleanObjects(){
 	printf("All cows are free\n");
 	for (int i=0; i < number_of_lights; i++){
 		free(lights[i]);
+	}
+}
+
+void printSettings(){
+	//Print Upper Right: 
+	//scene, lighting, textures
+	glColor3f(1.0,1.0,1.0);
+	int height = glutGet(GLUT_WINDOW_HEIGHT);
+	int width = glutGet(GLUT_WINDOW_WIDTH);
+	glWindowPos2i(width-150,height-15);
+	if(sceneflag){
+		Print("Scene NightTime");
+	}
+	else{
+		Print("Scene Daylight");
+
+	}
+	glWindowPos2i(width-150,height-30);
+	if(lightingOn){
+		Print("Lighting: ON");
+	}
+	else{
+		Print("Lighting: OFF");
+	}
+	glWindowPos2i(width-150,height-45);
+	if(textureFlag){
+		Print("Textures: ON");
+	}
+	else{
+		Print("Textures: OFF");
+	}
+	glWindowPos2i(width-150,height-60);
+	if(flashlightFlag){
+		Print("Flash Light: ON");
+	}
+	else{
+		Print("Flash Light: OFF");
 	}
 }
 
